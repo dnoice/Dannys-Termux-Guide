@@ -1,0 +1,370 @@
+/* --- CSS Variables (Custom Properties) --- */
+:root {
+  /* Light Theme */
+  --bg-color: #f8f9fa;
+  --bg-secondary-color: #ffffff;
+  --text-color: #212529;
+  --text-muted: #6c757d;
+  --accent-color: #007bff;
+  --accent-hover-color: #0056b3;
+  --heading-color: #0056b3;
+  --border-color: #e9ecef;
+  --code-bg: #e9ecef;
+  --code-text: #212529;
+  --code-block-bg: #282c34; /* Darker code blocks look good in light theme too */
+  --code-block-text: #abb2bf;
+  --toc-bg: #eef7ff;
+  --toc-border: #cce5ff;
+  --toc-heading: #004085;
+  --shadow-color: rgba(0, 0, 0, 0.1);
+  --toggle-bg: #dee2e6;
+  --toggle-fg: #ffffff;
+  --toggle-icon-sun: #f39c12;
+  --toggle-icon-moon: #495057;
+
+  /* Transitions */
+  --transition-speed: 0.3s;
+}
+
+[data-theme="dark"] {
+  /* Dark Theme */
+  --bg-color: #1a1d21; /* Slightly off-black */
+  --bg-secondary-color: #2c3035; /* Darker card background */
+  --text-color: #e0e0e0;
+  --text-muted: #adb5bd;
+  --accent-color: #58a6ff; /* Lighter blue for dark mode */
+  --accent-hover-color: #80bfff;
+  --heading-color: #6cb6ff; /* Slightly lighter heading blue */
+  --border-color: #495057;
+  --code-bg: #3a3f44;
+  --code-text: #e0e0e0;
+  --code-block-bg: #16181c; /* Even darker code blocks */
+  --code-block-text: #c8ccd4;
+  --toc-bg: #2a3a4a;
+  --toc-border: #405a7a;
+  --toc-heading: #a8caff;
+  --shadow-color: rgba(255, 255, 255, 0.05);
+  --toggle-bg: #495057;
+  --toggle-fg: #1a1d21;
+  --toggle-icon-sun: #adb5bd;
+  --toggle-icon-moon: #f1c40f; /* Yellow moon in dark */
+}
+
+/* --- General Styles --- */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth; /* Enable smooth scrolling */
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  line-height: 1.7;
+  margin: 0;
+  padding: 0;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease;
+  font-size: 16px; /* Base font size */
+}
+
+.container {
+  max-width: 850px;
+  margin: 30px auto;
+  padding: 20px 30px 30px 30px;
+  background-color: var(--bg-secondary-color);
+  border-radius: 12px;
+  box-shadow: 0 5px 20px var(--shadow-color);
+  transition: background-color var(--transition-speed) ease;
+  position: relative; /* For theme toggle positioning */
+}
+
+/* --- Header --- */
+.main-header {
+  text-align: center;
+  margin-bottom: 2.5em;
+  padding-bottom: 1.5em;
+  border-bottom: 2px solid var(--border-color);
+  transition: border-color var(--transition-speed) ease;
+}
+
+.main-header h1 {
+  font-size: 2.2em;
+  color: var(--heading-color);
+  margin-bottom: 0.3em;
+  transition: color var(--transition-speed) ease;
+}
+
+.main-header .intro {
+  font-size: 1.1em;
+  color: var(--text-muted);
+  max-width: 700px;
+  margin: 0 auto;
+  transition: color var(--transition-speed) ease;
+}
+
+/* --- Headings --- */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--heading-color);
+  margin-top: 2em;
+  margin-bottom: 1em;
+  font-weight: 600;
+  transition: color var(--transition-speed) ease;
+}
+
+h2 {
+  font-size: 1.8em;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 0.4em;
+  transition: border-color var(--transition-speed) ease;
+}
+
+h3 {
+  font-size: 1.4em;
+}
+
+/* --- Text & Lists --- */
+p, ul, ol {
+  margin-bottom: 1.2em;
+}
+
+ul, ol {
+  padding-left: 25px;
+}
+
+li {
+  margin-bottom: 0.6em;
+}
+
+strong {
+  font-weight: 600;
+  color: var(--accent-color);
+  transition: color var(--transition-speed) ease;
+}
+
+a {
+  color: var(--accent-color);
+  text-decoration: none;
+  transition: color var(--transition-speed) ease, text-decoration 0.2s ease;
+}
+
+a:hover, a:focus {
+  color: var(--accent-hover-color);
+  text-decoration: underline;
+}
+
+/* --- Code Styling --- */
+code { /* Inline code */
+  background-color: var(--code-bg);
+  color: var(--code-text);
+  padding: 0.2em 0.5em;
+  margin: 0 0.1em;
+  font-size: 0.9em;
+  border-radius: 4px;
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+  transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease;
+}
+
+pre { /* Code blocks */
+  background-color: var(--code-block-bg);
+  color: var(--code-block-text);
+  padding: 1em 1.2em;
+  border-radius: 8px;
+  overflow-x: auto;
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+  font-size: 0.95em;
+  line-height: 1.5;
+  margin: 1.5em 0;
+  position: relative; /* For copy button */
+  transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+pre code { /* Reset inline style within pre */
+  background-color: transparent;
+  padding: 0;
+  margin: 0;
+  font-size: inherit;
+  color: inherit;
+  border-radius: 0;
+}
+
+/* Copy Button Styling (Initially hidden, shown by JS) */
+.copy-button {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    padding: 4px 8px;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: var(--code-block-text);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.8em;
+    opacity: 0.6;
+    transition: opacity 0.2s ease, background-color 0.2s ease;
+}
+pre:hover .copy-button {
+    opacity: 1;
+}
+.copy-button:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+.copy-button.copied {
+    background-color: var(--accent-color);
+    color: var(--bg-secondary-color);
+    border-color: var(--accent-color);
+}
+
+
+/* --- Table of Contents (TOC) --- */
+.toc {
+  background-color: var(--toc-bg);
+  border: 1px solid var(--toc-border);
+  padding: 1em 1.5em;
+  border-radius: 8px;
+  margin: 2.5em 0;
+  transition: background-color var(--transition-speed) ease, border-color var(--transition-speed) ease;
+}
+
+.toc h3 {
+  margin-top: 0;
+  margin-bottom: 0.8em;
+  color: var(--toc-heading);
+  font-size: 1.2em;
+  transition: color var(--transition-speed) ease;
+}
+
+.toc ul {
+  list-style: none;
+  padding-left: 0;
+  margin-bottom: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Responsive columns */
+  gap: 0.5em;
+}
+
+.toc li {
+  margin-bottom: 0;
+}
+
+.toc a {
+  display: block;
+  padding: 0.3em 0;
+  color: var(--accent-color);
+  font-weight: 500;
+  transition: color var(--transition-speed) ease;
+}
+.toc a:hover {
+  color: var(--accent-hover-color);
+  text-decoration: none;
+}
+
+/* --- Footer --- */
+footer {
+  text-align: center;
+  margin-top: 3em;
+  padding-top: 1.5em;
+  border-top: 1px solid var(--border-color);
+  font-size: 0.9em;
+  color: var(--text-muted);
+  transition: border-color var(--transition-speed) ease, color var(--transition-speed) ease;
+}
+
+/* --- Dark Mode Toggle Button --- */
+.theme-toggle-button {
+    background: var(--toggle-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 30px;
+    cursor: pointer;
+    display: inline-flex; /* Changed from flex */
+    align-items: center; /* Align icons vertically */
+    justify-content: space-between;
+    padding: 5px;
+    position: absolute; /* Position relative to container */
+    top: 20px;
+    right: 20px;
+    width: 60px; /* Fixed width */
+    height: 30px; /* Fixed height */
+    transition: background-color var(--transition-speed) ease;
+    overflow: hidden; /* Hide the icon that's moved out */
+}
+
+.theme-toggle-button::after { /* The moving circle */
+    content: '';
+    background: var(--toggle-fg);
+    border-radius: 50%;
+    display: block;
+    width: 20px; /* Circle size */
+    height: 20px; /* Circle size */
+    position: absolute;
+    top: 4px; /* Adjust vertical position */
+    left: 5px; /* Initial position (light mode) */
+    transition: transform var(--transition-speed) ease, background-color var(--transition-speed) ease;
+}
+
+[data-theme="dark"] .theme-toggle-button::after {
+    transform: translateX(30px); /* Move circle to the right for dark mode */
+}
+
+.theme-toggle-button span { /* Icons */
+    font-size: 14px; /* Adjust icon size */
+    z-index: 1; /* Ensure icons are above the circle */
+    width: 20px; /* Ensure space for icons */
+    text-align: center;
+    line-height: 20px; /* Center icon vertically */
+}
+
+.icon-sun { color: var(--toggle-icon-sun); }
+.icon-moon { color: var(--toggle-icon-moon); }
+
+/* Hide the inactive icon visually but keep accessible */
+[data-theme="dark"] .icon-sun { display: none; }
+html:not([data-theme="dark"]) .icon-moon { display: none; }
+
+
+/* --- Responsive Design --- */
+@media (max-width: 900px) {
+  .container {
+    margin: 20px;
+    padding: 15px 20px 20px 20px;
+  }
+}
+
+@media (max-width: 600px) {
+  body {
+    font-size: 15px;
+  }
+  .container {
+    margin: 10px;
+    padding: 10px 15px 15px 15px;
+    border-radius: 8px;
+  }
+  .main-header h1 {
+    font-size: 1.8em;
+  }
+  .main-header .intro {
+    font-size: 1em;
+  }
+  h2 {
+    font-size: 1.5em;
+  }
+  h3 {
+    font-size: 1.2em;
+  }
+  pre {
+    font-size: 0.9em;
+    padding: 0.8em 1em;
+  }
+  .theme-toggle-button {
+      top: 10px;
+      right: 10px;
+  }
+  .toc ul {
+      grid-template-columns: 1fr; /* Stack TOC items on small screens */
+      gap: 0.3em;
+  }
+}
