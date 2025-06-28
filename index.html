@@ -4,16 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Forrest's Termux Guide - Let's Do This Right</title>
-    
+    <title>Forest's Termux Guide - Let's Do This Right</title>
+
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    
+
     <style>
         * {
             margin: 0;
@@ -47,22 +47,22 @@
             --primary: #3b82f6;
             --primary-light: #60a5fa;
             --primary-dark: #2563eb;
-            
+
             --accent: #10b981;
             --accent-light: #34d399;
-            
+
             --warning: #f59e0b;
             --danger: #ef4444;
-            
+
             --bg-dark: #111827;
             --bg-card: #1f2937;
             --bg-code: #0f172a;
             --bg-hover: #374151;
-            
+
             --text-primary: #f9fafb;
             --text-secondary: #d1d5db;
             --text-muted: #9ca3af;
-            
+
             --border: #374151;
             --shadow: rgba(0, 0, 0, 0.5);
         }
@@ -89,7 +89,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: 
+            background:
                 radial-gradient(circle at 20% 50%, rgba(59, 130, 246, 0.05) 0%, transparent 50%),
                 radial-gradient(circle at 80% 80%, rgba(16, 185, 129, 0.05) 0%, transparent 50%);
             z-index: -1;
@@ -619,13 +619,13 @@
             .container {
                 flex-direction: column;
             }
-            
+
             .sidebar {
                 width: 100%;
                 position: relative;
                 top: 0;
             }
-            
+
             .mobile-menu-toggle {
                 display: flex;
             }
@@ -635,18 +635,18 @@
             h1 {
                 font-size: 2em;
             }
-            
+
             .section {
                 padding: 25px;
             }
-            
+
             .command-grid {
                 grid-template-columns: 1fr;
             }
         }
 
         /* Special styles */
-        .forrest-highlight {
+        .Forest-highlight {
             background: linear-gradient(to right, var(--primary), var(--accent));
             background-clip: text;
             -webkit-background-clip: text;
@@ -696,7 +696,7 @@
 
     <!-- Header -->
     <header>
-        <h1><i class="fas fa-terminal"></i> Hey Forrest! Let's Master Termux</h1>
+        <h1><i class="fas fa-terminal"></i> Hey Forest! Let's Master Termux</h1>
         <p class="subtitle">Your personal guide to turning your Android into a Linux powerhouse – no BS, just the good stuff</p>
     </header>
 
@@ -757,7 +757,7 @@
             <!-- Introduction -->
             <section class="section" id="intro">
                 <h2><i class="fas fa-mobile-alt"></i> What is Termux?</h2>
-                <p>Alright Forrest, let me break this down for you. Termux is basically Linux on your Android phone. No root needed, no complicated setup – just install and you've got a full Linux terminal in your pocket.</p>
+                <p>Alright Forest, let me break this down for you. Termux is basically Linux on your Android phone. No root needed, no complicated setup – just install and you've got a full Linux terminal in your pocket.</p>
 
                 <div class="info-box note-box">
                     <h4><i class="fas fa-lightbulb"></i> Why You'll Love This</h4>
@@ -784,7 +784,7 @@ Running Linux on my phone!</div>
             <!-- Installation -->
             <section class="section" id="install">
                 <h2><i class="fas fa-download"></i> Installation Guide</h2>
-                
+
                 <div class="info-box danger-box">
                     <h4><i class="fas fa-exclamation-triangle"></i> Important Warning</h4>
                     <p>DO NOT install from Google Play Store. That version is outdated and broken. We need to do this right.</p>
@@ -823,7 +823,7 @@ Running Linux on my phone!</div>
             <!-- First Launch -->
             <section class="section" id="first-launch">
                 <h2><i class="fas fa-rocket"></i> First Launch Setup</h2>
-                
+
                 <h3>What You'll See</h3>
                 <p>When you open Termux for the first time, you'll see something like this:</p>
 
@@ -888,8 +888,8 @@ $ </div>
             <!-- Storage Setup - MOVED UP -->
             <section class="section" id="setup-storage">
                 <h2><i class="fas fa-folder-open"></i> Storage Setup</h2>
-                
-                <p>Forrest, this is important – by default, Termux can't see your phone's files. Let's fix that right now:</p>
+
+                <p>Forest, this is important – by default, Termux can't see your phone's files. Let's fix that right now:</p>
 
                 <div class="code-container">
                     <div class="code-header">
@@ -945,8 +945,8 @@ dcim      downloads  movies  music  pictures  shared</div>
             <!-- Terminal Basics -->
             <section class="section" id="basics">
                 <h2><i class="fas fa-keyboard"></i> Terminal Basics</h2>
-                
-                <p>Forrest, think of the terminal as texting your phone. You type a command, hit Enter, and it responds or does something.</p>
+
+                <p>Forest, think of the terminal as texting your phone. You type a command, hit Enter, and it responds or does something.</p>
 
                 <h3>Essential Keyboard Shortcuts</h3>
                 <table>
@@ -1001,9 +1001,9 @@ dcim      downloads  movies  music  pictures  shared</div>
             <!-- Essential Commands -->
             <section class="section" id="commands">
                 <h2><i class="fas fa-terminal"></i> Essential Commands</h2>
-                
+
                 <h3>Navigation Commands</h3>
-                
+
                 <div class="command-grid">
                     <div class="command-card" onclick="showModal('cmd-pwd')">
                         <div class="command-name">pwd</div>
@@ -1020,7 +1020,7 @@ dcim      downloads  movies  music  pictures  shared</div>
                 </div>
 
                 <h3>File Operations</h3>
-                
+
                 <div class="command-grid" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));">
                     <div class="command-card" onclick="showModal('cmd-touch')">
                         <div class="command-name">touch</div>
@@ -1076,7 +1076,7 @@ dcim      downloads  movies  music  pictures  shared</div>
             <!-- Package Management -->
             <section class="section" id="packages">
                 <h2><i class="fas fa-box"></i> Installing Software</h2>
-                
+
                 <p>The package manager (<code>pkg</code>) is like an app store for Termux. Here's how to use it:</p>
 
                 <div class="command-grid">
@@ -1127,18 +1127,18 @@ dcim      downloads  movies  music  pictures  shared</div>
             <!-- Real Projects -->
             <section class="section" id="projects">
                 <h2><i class="fas fa-code"></i> Real Projects</h2>
-                
+
                 <h3>Project 1: Python Script</h3>
                 <p>Let's create a simple Python script:</p>
 
                 <div class="code-container">
                     <div class="code-header">
                         <span class="code-label">Create and edit a Python file</span>
-                        <button class="copy-btn" onclick="copyCode(this, 'nano hello_forrest.py')">
+                        <button class="copy-btn" onclick="copyCode(this, 'nano hello_Forest.py')">
                             <i class="fas fa-copy"></i> Copy
                         </button>
                     </div>
-                    <div class="code-block with-prompt">nano hello_forrest.py</div>
+                    <div class="code-block with-prompt">nano hello_Forest.py</div>
                 </div>
 
                 <p>Add this code:</p>
@@ -1150,7 +1150,7 @@ dcim      downloads  movies  music  pictures  shared</div>
 import random
 import datetime
 
-name = "Forrest"
+name = "Forest"
 now = datetime.datetime.now()
 
 print(f"Hey {name}! Welcome to Python on Termux!")
@@ -1163,7 +1163,7 @@ print(f"Your lucky number today is: {random.randint(1, 100)}")`)">
 import random
 import datetime
 
-name = "Forrest"
+name = "Forest"
 now = datetime.datetime.now()
 
 print(f"Hey {name}! Welcome to Python on Termux!")
@@ -1176,11 +1176,11 @@ print(f"Your lucky number today is: {random.randint(1, 100)}")</div>
                 <div class="code-container">
                     <div class="code-header">
                         <span class="code-label">Run the script</span>
-                        <button class="copy-btn" onclick="copyCode(this, 'python hello_forrest.py')">
+                        <button class="copy-btn" onclick="copyCode(this, 'python hello_Forest.py')">
                             <i class="fas fa-copy"></i> Copy
                         </button>
                     </div>
-                    <div class="code-block with-prompt">python hello_forrest.py</div>
+                    <div class="code-block with-prompt">python hello_Forest.py</div>
                 </div>
 
                 <h3>Project 2: Web Server</h3>
@@ -1217,7 +1217,7 @@ print(f"Your lucky number today is: {random.randint(1, 100)}")</div>
                         </button>
                     </div>
                     <div class="code-block">#!/bin/bash
-# Forrest's Download Organizer
+# Forest's Download Organizer
 
 cd ~/storage/downloads || exit
 echo "Organizing downloads..."
@@ -1252,7 +1252,7 @@ ls -la</div>
             <!-- Advanced Topics -->
             <section class="section" id="advanced">
                 <h2><i class="fas fa-rocket"></i> Advanced Topics</h2>
-                
+
                 <h3>SSH Access</h3>
                 <p>Control your phone from your computer via SSH:</p>
 
@@ -1337,7 +1337,7 @@ ls -la</div>
             <!-- Troubleshooting -->
             <section class="section" id="troubleshooting">
                 <h2><i class="fas fa-tools"></i> Troubleshooting</h2>
-                
+
                 <div class="info-box danger-box">
                     <h4><i class="fas fa-times-circle"></i> Permission Denied Errors</h4>
                     <p><strong>Problem:</strong> Can't access certain directories</p>
@@ -1380,10 +1380,10 @@ ls -la</div>
             <!-- Final Words -->
             <section class="section">
                 <h2><i class="fas fa-trophy"></i> You Made It!</h2>
-                
+
                 <div class="info-box note-box">
                     <h4><i class="fas fa-star"></i> Final Thoughts</h4>
-                    <p>Forrest, you've got everything you need to start using Termux like a pro. Remember:</p>
+                    <p>Forest, you've got everything you need to start using Termux like a pro. Remember:</p>
                     <ul>
                         <li>Start simple – don't try to learn everything at once</li>
                         <li>Google is your friend when you're stuck</li>
@@ -1391,7 +1391,7 @@ ls -la</div>
                         <li>The more you use it, the more natural it becomes</li>
                     </ul>
                     <p style="margin-top: 20px; text-align: center; font-size: 1.2em;">
-                        <span class="forrest-highlight">Now go build something awesome! 🚀</span>
+                        <span class="Forest-highlight">Now go build something awesome! 🚀</span>
                     </p>
                 </div>
             </section>
@@ -1452,12 +1452,12 @@ ls -la</div>
                 const codeKey = button.getAttribute('data-code');
                 text = codeSnippets[codeKey];
             }
-            
+
             navigator.clipboard.writeText(text).then(() => {
                 const originalHTML = button.innerHTML;
                 button.classList.add('copied');
                 button.innerHTML = '<i class="fas fa-check"></i> Copied!';
-                
+
                 setTimeout(() => {
                     button.classList.remove('copied');
                     button.innerHTML = originalHTML;
@@ -1468,7 +1468,7 @@ ls -la</div>
         // Code snippets storage
         const codeSnippets = {
             'organize-downloads': `#!/bin/bash
-# Forrest's Download Organizer
+# Forest's Download Organizer
 
 cd ~/storage/downloads || exit
 echo "Organizing downloads..."
@@ -1494,7 +1494,7 @@ ls -la`
                 icon.classList.remove('fa-copy');
                 icon.classList.add('fa-check');
                 el.style.color = 'var(--accent)';
-                
+
                 setTimeout(() => {
                     icon.classList.remove('fa-check');
                     icon.classList.add('fa-copy');
@@ -1559,7 +1559,7 @@ ls -la`
                     '<p style="margin-top: 20px;">To install any of these, search for them in F-Droid just like you did with Termux.</p>'
                 ].join('')
             },
-            
+
             // Customization modals
             'customize-colors': {
                 title: 'Customizing Termux Appearance',
@@ -1603,7 +1603,7 @@ ls -la`
                     '</ul>'
                 ].join('')
             },
-            
+
             // Storage modals
             'storage-downloads': {
                 title: 'Downloads Folder Access',
@@ -1671,7 +1671,7 @@ ls -la`
                     </ul>
                 `
             },
-            
+
             // Command modals
             'cmd-pwd': {
                 title: 'pwd - Print Working Directory',
@@ -1933,7 +1933,7 @@ ls -la`
                     </ul>
                 `
             },
-            
+
             // Package management modals
             'pkg-search': {
                 title: 'Searching for Packages',
@@ -2035,7 +2035,7 @@ ls -la`
                     </div>
                 `
             },
-            
+
             // API modals
             'api-battery': {
                 title: 'Battery Status API',
@@ -2111,11 +2111,11 @@ ls -la`
                     <div class="code-container">
                         <div class="code-header">
                             <span class="code-label">Set clipboard content</span>
-                            <button class="copy-btn" onclick="copyCode(this, 'echo "Hello Forrest" | termux-clipboard-set')">
+                            <button class="copy-btn" onclick="copyCode(this, 'echo "Hello Forest" | termux-clipboard-set')">
                                 <i class="fas fa-copy"></i> Copy
                             </button>
                         </div>
-                        <div class="code-block with-prompt">echo "Hello Forrest" | termux-clipboard-set</div>
+                        <div class="code-block with-prompt">echo "Hello Forest" | termux-clipboard-set</div>
                     </div>
                     <p><strong>Useful for:</strong></p>
                     <ul>
