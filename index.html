@@ -3,302 +3,1836 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    	<!-- Favicon -->
-    <link rel="icon" href="assets/logos/logo.png" type="image/png" />
-    <title>🚀 Termux Guide: Level Up Your Android Game!</title>
-    <link rel="stylesheet" href="css/styles.css">
-    </head>
+    <title>Forrest's Personal Termux Guide - Let's Get This Bread 🍞</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #00d4ff;
+            --secondary: #ff006e;
+            --accent: #00ff88;
+            --bg-dark: #0a0a0a;
+            --bg-card: #141414;
+            --bg-code: #1a1a1a;
+            --text-primary: #e0e0e0;
+            --text-secondary: #a0a0a0;
+            --border: #2a2a2a;
+            --success: #00ff88;
+            --warning: #ff9800;
+            --error: #ff006e;
+            --sidebar-width: 300px;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background: var(--bg-dark);
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.03;
+            background: 
+                radial-gradient(circle at 20% 50%, var(--primary) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, var(--secondary) 0%, transparent 50%),
+                radial-gradient(circle at 40% 20%, var(--accent) 0%, transparent 50%);
+            animation: bgMove 20s ease-in-out infinite;
+        }
+
+        @keyframes bgMove {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(-20px, -20px) scale(1.1); }
+            66% { transform: translate(20px, -10px) scale(0.9); }
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #7e57c2 100%);
+            padding: 80px 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            animation: headerGradient 10s ease infinite;
+        }
+
+        @keyframes headerGradient {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 200%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            animation: headerShine 3s infinite;
+        }
+
+        @keyframes headerShine {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        h1 {
+            font-size: 3em;
+            margin-bottom: 15px;
+            color: #fff;
+            text-shadow: 0 0 30px rgba(0, 212, 255, 0.5);
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { text-shadow: 0 0 30px rgba(0, 212, 255, 0.5); }
+            to { text-shadow: 0 0 40px rgba(0, 212, 255, 0.8), 0 0 50px rgba(0, 212, 255, 0.6); }
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: var(--sidebar-width);
+            height: 100vh;
+            background: var(--bg-card);
+            border-right: 1px solid var(--border);
+            transform: translateX(-100%);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 1000;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .sidebar.active {
+            transform: translateX(0);
+        }
+
+        .sidebar-toggle {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1001;
+            background: var(--primary);
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            box-shadow: 0 4px 20px rgba(0, 212, 255, 0.3);
+        }
+
+        .sidebar-toggle:hover {
+            transform: scale(1.1) rotate(180deg);
+            background: var(--accent);
+        }
+
+        .sidebar-toggle.active {
+            left: calc(var(--sidebar-width) + 20px);
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            transition: margin-left 0.3s;
+        }
+
+        .main-content.shifted {
+            margin-left: calc(var(--sidebar-width) / 2);
+        }
+
+        /* Progress Bar */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--bg-dark);
+            z-index: 999;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            width: 0%;
+            transition: width 0.3s;
+            animation: progressPulse 2s infinite;
+        }
+
+        @keyframes progressPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+
+        /* Sections */
+        .section {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 40px;
+            margin-bottom: 30px;
+            border: 1px solid var(--border);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s;
+            animation: sectionFadeIn 0.6s ease-out;
+        }
+
+        @keyframes sectionFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 212, 255, 0.1);
+            border-color: var(--primary);
+        }
+
+        .section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s;
+        }
+
+        .section:hover::before {
+            transform: scaleX(1);
+        }
+
+        /* Typography */
+        h2 {
+            color: var(--primary);
+            margin-bottom: 25px;
+            font-size: 2em;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        h2 .icon {
+            font-size: 1.2em;
+            animation: iconBounce 2s infinite;
+        }
+
+        @keyframes iconBounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        h3 {
+            color: var(--accent);
+            margin-top: 30px;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+
+        /* Code Blocks */
+        .code-container {
+            position: relative;
+            margin: 20px 0;
+            border-radius: 12px;
+            overflow: hidden;
+            background: var(--bg-code);
+            border: 1px solid var(--border);
+            transition: all 0.3s;
+        }
+
+        .code-container:hover {
+            border-color: var(--primary);
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.1);
+        }
+
+        .code-header {
+            background: #0d0d0d;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .code-label {
+            color: var(--text-secondary);
+            font-size: 0.9em;
+            font-family: monospace;
+        }
+
+        .copy-btn {
+            background: var(--primary);
+            border: none;
+            color: var(--bg-dark);
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.3s;
+            font-size: 0.9em;
+        }
+
+        .copy-btn:hover {
+            background: var(--accent);
+            transform: scale(1.05);
+        }
+
+        .copy-btn.copied {
+            background: var(--success);
+            animation: copySuccess 0.5s;
+        }
+
+        @keyframes copySuccess {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        .code-block {
+            padding: 20px;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            overflow-x: auto;
+            position: relative;
+            line-height: 1.5;
+        }
+
+        .code-block::before {
+            content: '$ ';
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        /* Info Boxes */
+        .info-box {
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 12px;
+            position: relative;
+            overflow: hidden;
+            animation: infoSlide 0.5s ease-out;
+        }
+
+        @keyframes infoSlide {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .why-box {
+            background: linear-gradient(135deg, #1e2a3a, #2a3a4a);
+            border-left: 4px solid var(--primary);
+        }
+
+        .tip {
+            background: linear-gradient(135deg, #1a3a1a, #2a4a2a);
+            border-left: 4px solid var(--success);
+        }
+
+        .warning {
+            background: linear-gradient(135deg, #3a1a1a, #4a2a2a);
+            border-left: 4px solid var(--error);
+        }
+
+        .forrest-note {
+            background: linear-gradient(135deg, #2a1a3a, #3a2a4a);
+            border-left: 4px solid #ff00ff;
+        }
+
+        .info-box h4 {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Modal System */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 2000;
+            animation: modalFade 0.3s;
+        }
+
+        @keyframes modalFade {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--bg-card);
+            padding: 40px;
+            border-radius: 16px;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+            animation: modalSlide 0.3s;
+            border: 1px solid var(--primary);
+            box-shadow: 0 20px 60px rgba(0, 212, 255, 0.3);
+        }
+
+        @keyframes modalSlide {
+            from {
+                transform: translate(-50%, -50%) scale(0.8);
+                opacity: 0;
+            }
+            to {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 1;
+            }
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: var(--error);
+            border: none;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .modal-close:hover {
+            transform: rotate(90deg) scale(1.1);
+        }
+
+        /* Interactive Elements */
+        .interactive-demo {
+            background: var(--bg-code);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 1px solid var(--border);
+        }
+
+        .terminal-sim {
+            background: #000;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: monospace;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .terminal-input {
+            background: transparent;
+            border: none;
+            color: var(--accent);
+            font-family: monospace;
+            font-size: 1em;
+            width: 100%;
+            outline: none;
+        }
+
+        .terminal-output {
+            color: var(--text-primary);
+            margin-top: 10px;
+            white-space: pre-wrap;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: var(--bg-dark);
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.3);
+        }
+
+        /* Command Explorer */
+        .command-explorer {
+            background: var(--bg-code);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .command-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            margin: 10px 0;
+            background: var(--bg-dark);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 1px solid transparent;
+        }
+
+        .command-item:hover {
+            border-color: var(--primary);
+            transform: translateX(5px);
+            background: #1a1a1a;
+        }
+
+        .command-name {
+            font-family: monospace;
+            color: var(--primary);
+            font-weight: bold;
+            margin-right: 15px;
+        }
+
+        .command-desc {
+            color: var(--text-secondary);
+            flex: 1;
+        }
+
+        /* Floating Action Button */
+        .fab {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--secondary);
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(255, 0, 110, 0.4);
+            transition: all 0.3s;
+            z-index: 900;
+        }
+
+        .fab:hover {
+            transform: scale(1.1) rotate(360deg);
+            background: var(--primary);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 250px;
+            }
+            
+            .main-content.shifted {
+                margin-left: 0;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            .section {
+                padding: 20px;
+            }
+        }
+
+        /* Loading Animation */
+        .loader {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: none;
+        }
+
+        .loader-circle {
+            width: 60px;
+            height: 60px;
+            border: 3px solid var(--bg-card);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .forrest-special {
+            background: linear-gradient(45deg, #ff00ff, #00ffff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: bold;
+        }
+    </style>
+</head>
 <body>
-
-    <div class="container">
-        <header class="main-header">
-            <h1>Termux Guide: Level Up Your Android Games!</h1>
-            <p class="intro">Alright Danny, here's your personalized Termux Cheat Sheet!</p>
-            <p>This guide will walk you through the essentials, making Termux feel less like a black box and more like your personal bitch!</p>
-            <button id="darkModeToggle" class="theme-toggle-button" aria-label="Toggle dark mode">
-                <span class="icon-sun">☀️</span><span class="icon-moon">🌙</span>
-            </button>
-        </header>
-
-        <nav class="toc" aria-label="Table of Contents">
-            <h3>Quick Jumps:</h3>
-            <ul>
-                <li><a href="#step1">Step 1: First Launch & Updates!</a></li>
-                <li><a href="#step1-5">Step 1.5: Upgrade Your Shell to Fish! (Highly Recommended)</a></li>
-                <li><a href="#step2">Step 2: Finding Your Way Around</a></li>
-                <li><a href="#step3">Step 3: Making Folders & Files</a></li>
-                <li><a href="#step4">Step 4: Getting New Tools (Packages)</a></li>
-                <li><a href="#step5">Step 5: Editing Text with Nano</a></li>
-                <li><a href="#step6">Step 6: Talking to Android (Termux API)</a></li>
-                <li><a href="#step7">Step 7: Accessing Phone Storage</a></li>
-                <li><a href="#step8">Step 8: Running Simple Scripts</a></li>
-                <li><a href="#tips">Essential Tips & Shortcuts</a></li>
-                <li><a href="#next">What's Next? Explore Further!</a></li>
-            </ul>
-        </nav>
-
-        <main>
-            <section id="step1">
-                <h2>Step 1: The Setup Ritual (Don't Skip!)</h2>
-                <p>First blood. Get Termux open and lay the groundwork.</p>
-                <ol>
-                    <li><strong>Launch Termux:</strong> Hit the icon. Stare into the void.</li>
-                    <li><strong>The Prompt Awaits:</strong> That blinking cursor after <code>$</code>? That's your command line. Home base is <code>~</code>.</li>
-                    <li><strong>Rule #1: Keep Your Tools Sharp:</strong> Update everything. No excuses. Run this command NOW:
-                        <pre><code>pkg update && pkg upgrade -y</code></pre>
-                        <p>This syncs with the software arsenal (<code>update</code>) and loads the latest versions (<code>upgrade</code>). <code>-y</code> means "Yeah, whatever, just do it." Give it a minute. If it asks about config files, just mash Enter (or type 'N' then Enter) – default is usually fine to start.</p>
-                        <p><strong>🔥 Baseline Secured. Let's move. 🔥</strong></p>
-                    </li>
-                </ol>
-            </section>
-
-            <section id="step1-5">
-                <h2>Step 1.5: Supercharge Your Shell: Enter the Fish 🐠</h2>
-                <p>Default Bash is okay, but Fish? Fish is your command-line co-pilot. It practically reads your mind. Upgrade now, thank me later!</p>
-                <p>Why Fish rocks:</p>
-                <ul>
-                    <li><strong>🧠 Psychic Autosuggestions:</strong> Start typing, it guesses the rest in gray. Hit Right Arrow (→) or Ctrl+F. BOOM. Done.</li>
-                    <li><strong>✅ Built-in Spellcheck (Sorta):</strong> Bad commands look different. Saves you from stupid typos.</li>
-                    <li><strong>💡 God-Tier Tab Completion:</strong> Hit Tab. Watch it complete commands, files, options like magic. Menus if needed.</li>
-                    <li><strong>🎨 Pimp Your Prompt:</strong> Clearer path info, looks cooler.</li>
-                </ul>
-                <p>Lock and load:</p>
-                <ol>
-                    <li><strong>Install Fish:</strong>
-                        <pre><code>pkg install fish</code></pre>
-                        (Hit <code>y</code> if it asks).
-                    </li>
-                    <li><strong>Make It Default:</strong> Tell Termux Fish is the new boss.
-                        <pre><code>chsh -s fish</code></pre>
-                    </li>
-                    <li><strong>Reload:</strong> Kill Termux completely (swipe it away in recent apps) and fire it back up.</li>
-                </ol>
-                <p>Your prompt should look different (maybe a <code>></code>). Try typing <code>ls</code>. See that syntax highlighting? Feel the power? That's Fish.</p>
-                <p><strong>💯 Welcome to the future. Command line just got badass.</strong></p>
-                <p><em>(Guide assumes Fish from here, but most basics are the same).</em></p>
-            </section>
-
-            <section id="step2">
-                <h2>Step 2: Mapping the Terrain (Navigation)</h2>
-                <p>Know your surroundings. Basic recon commands.</p>
-                <ul>
-                    <li><strong>Location Check (`pwd`):</strong> Print Working Directory. Where the hell are you?
-                        <pre><code>pwd</code></pre>
-                    </li>
-                    <li><strong>Intel Scan (`ls`):</strong> List files/folders. Fish might color-code it for you.
-                        <pre><code>ls</code></pre>
-                        <em>Pro Moves: <code>ls -l</code> (long format), <code>ls -a</code> (show hidden dotfiles).</em>
-                    </li>
-                    <li><strong>Move Out (`cd`):</strong> Change Directory. Your Fish prompt probably shows the path already.
-                        <ul>
-                            <li><code>cd ~</code> or <code>cd</code>: Back to Home Base.</li>
-                            <li><code>cd ..</code>: Up one level (parent folder).</li>
-                            <li><code>cd <foldername></code>: Dive in. (Type <code>cd pro</code> + Tab... see?)</li>
-                        </ul>
-                    </li>
-                </ul>
-            </section>
-
-            <section id="step3">
-                 <h2>Step 3: Building Your Base (Files & Folders)</h2>
-                <p>Carve out your own space.</p>
-                <ol>
-                    <li><strong>Create Territory (`mkdir`):</strong> Make a directory.
-                        <pre><code>mkdir projects</code></pre>
-                        (Check with <code>ls</code>).
-                    </li>
-                    <li><strong>Occupy (`cd`):</strong> Move into your new turf.
-                        <pre><code>cd projects</code></pre>
-                        (Prompt updates? Nice.)
-                    </li>
-                    <li><strong>Plant a Flag (`touch`):</strong> Create an empty file.
-                        <pre><code>touch notes.txt</code></pre>
-                        (Verify with <code>ls</code>).
-                    </li>
-                    <li><strong>Return to HQ (`cd`):</strong>
-                        <pre><code>cd ~</code></pre>
-                    </li>
-                </ol>
-            </section>
-
-            <section id="step4">
-                 <h2>Step 4: Armory Upgrade (Installing Tools)</h2>
-                <p>Stock up on essentials using <code>pkg</code>. Every operator needs their kit.</p>
-                 <ol>
-                    <li><strong>Recon (`pkg search`):</strong> Scout for available gear.
-                        <pre><code>pkg search network</code></pre>
-                    </li>
-                    <li><strong>Acquire (`pkg install`):</strong> Grab the goods. We need `termux-api` for Android bending and `nano` (a classic terminal editor - good to know it exists, but see Step 5 for a smoother mobile method).
-                        <pre><code>pkg install termux-api nano</code></pre>
-                        (Confirm with <code>y</code>).
-                    </li>
-                     <li><strong>Ditch Gear (`pkg uninstall`):</strong> If something sucks, remove it.
-                         <pre><code># Example: pkg uninstall bloatware</code></pre>
-                     </li>
-                </ol>
-            </section>
-
-            <section id="step5">
-                 <h2>Step 5: Edit Like a Boss (GUI Editor Hack) ⚡️</h2>
-                <p>Forget clunky terminal editors like `nano` or `vim` on your phone screen – that's a recipe for rage-quitting. We're gonna use a slick GUI editor for comfort, but bridge it back to Termux like a pro.</p>
-                <ol>
-                    <li><strong>Get a Real Editor:</strong> First, grab a decent *free* code editor app from the Play Store. **"QuickEdit Text Editor"** is a solid choice – it's fast and handles code nicely. Install it.</li>
-                    <li><strong>The `open` Command:</strong> Termux (especially with `termux-api` installed) gives you the `open` command (or `termux-open`). This tries to open a file using an appropriate Android app. Let's try it on the file we made:
-                        <pre><code># Make sure you're in the projects folder: cd ~/projects
-open notes.txt</code></pre>
-                    </li>
-                    <li><strong>Choose Your Weapon:</strong> Android will ask *how* you want to open the file. Select **QuickEdit** (or your chosen editor).</li>
-                    <li><strong>⚠️ The Catch (Android's Paranoia):</strong> Your file will open in QuickEdit, BUT Android's security often stops the editor from saving *directly* back to Termux's private space. It opens it read-only or saves copies elsewhere. Annoying? Yes. Dealbreaker? Hell no. We have a workaround.</li>
-                    <li><strong>The Save Hack (Copy/Paste Fu):</strong> This feels weird initially, but it's faster than fighting `nano` on mobile. GET THIS DOWN:
-                        <ol type="a">
-                            <li>Edit your file in QuickEdit. Make it awesome.</li>
-                            <li>When done, **SELECT ALL** text in QuickEdit (usually Menu -> Select All, or long-press options).</li>
-                            <li>**COPY** all that text to your clipboard (Menu -> Copy, or toolbar icon).</li>
-                            <li>Switch back to your Termux session.</li>
-                            <li>**CRITICAL STEP:** Use the `cat` command with output redirection (`>`). This **OVERWRITES** the original file completely. Be ready to paste! Type:
-                                <pre><code>cat > notes.txt</code></pre>
-                                (Hit Enter. Termux will just sit there, waiting...)
-                            </li>
-                            <li>**PASTE** your clipboard content into Termux. (Usually long-press on the screen -> Paste). You'll see your text appear.</li>
-                            <li>**IMMEDIATELY** press `Ctrl + D` in Termux. This tells `cat` "That's all, folks!" and saves the file. <strong>DON'T FORGET CTRL+D!</strong></li>
-                        </ol>
-                    </li>
-                    <li><strong>Verify the Kill:</strong> Check if your changes stuck using `cat` (this time *without* the `>`):
-                         <pre><code>cat notes.txt</code></pre>
-                         You should see your edited content right there in the terminal.
-                    </li>
-                </ol>
-                <p><strong>Master this copy/cat/paste dance.</strong> It bypasses Android's fussiness and lets you use a comfy editor. Way better than fat-fingering commands in `nano`. Trust.</p>
-            </section>
-
-            <section id="step6">
-                <h2>Step 6: Android Bending 101 (Termux API) ✨</h2>
-                <p>Time to make Android do your bidding using those <code>termux-</code> commands from the `termux-api` package.</p>
-                 <p><strong>Pay Attention:</strong> Android's gonna ask for permissions via the "Termux:API" app the first time. Slap **Allow**. Deny = Fail.</p>
-                <ul>
-                    <li><strong>Flash Message (`termux-toast`):</strong> Quick pop-up.
-                        <pre><code>termux-toast "System Override Engaged."</code></pre>
-                    </li>
-                    <li><strong>Power Levels (`termux-battery-status`):</strong> Juice check.
-                        <pre><code>termux-battery-status</code></pre>
-                    </li>
-                    <li><strong>Data Heist (Clipboard - `set`/`get`):</strong>
-                        <pre><code>termux-clipboard-set "Payload acquired from Termux."
-# Now copy something else...
-termux-clipboard-get</code></pre>
-                    </li>
-                    <li><strong>Interrogation (Dialog Box - `termux-dialog`):</strong> Make the system ask stuff.
-                        <pre><code>termux-dialog confirm -i "Proceed with extreme prejudice?" -t "Authorization Required"</code></pre>
-                    </li>
-                    <li><strong>Seismic Event (`termux-vibrate`):</strong> Make it shake.
-                         <pre><code>termux-vibrate -d 400 -f</code></pre>
-                         (400ms pulse. <code>-f</code> = Force. No excuses.)
-                    </li>
-                </ul>
-                 <p><em>Hack: Type <code>termux-</code> then spam Tab to see your arsenal. Add <code>--help</code> to any command for the manual (e.g., <code>termux-camera-info --help</code>).</em></p>
-            </section>
-
-            <section id="step7">
-                 <h2>Step 7: Breaching Storage Limits</h2>
-                <p>Termux lives in a sandbox. Let's punch some air holes to reach your main phone storage.</p>
-                 <ol>
-                    <li><strong>Request Access:</strong>
-                        <pre><code>termux-setup-storage</code></pre>
-                    </li>
-                    <li><strong>Grant Clearance:</strong> Android pops up. Hit **Allow**.</li>
-                    <li><strong>Locate Breach Point:</strong> Back home (<code>cd ~</code>), run <code>ls</code>. Spot the new <code>storage</code> directory. That's the gateway.</li>
-                    <li><strong>Infiltrate:</strong> <code>cd storage</code> then <code>ls</code>. You'll see links to your phone's zones:
-                        <ul>
-                            <li><code>dcim</code> (Camera Roll)</li>
-                            <li><code>downloads</code> (The usual dump ground)</li>
-                            <li><code>movies</code>, <code>music</code>, <code>pictures</code></li>
-                            <li><code>shared</code> (The main event - root internal storage)</li>
-                        </ul>
-                    </li>
-                </ol>
-                <p>Now you can roam these folders (<code>cd downloads</code>) and drop command-line bombs: <code>ls</code>, <code>cp</code> (copy), <code>mv</code> (move/rename), <code>rm</code> (delete - **NO UNDO! AIM CAREFULLY!**).</p>
-                 <p><em>Exfil Op: Copy notes to Downloads:</em></p>
-                 <pre><code># Ensure you're home: cd ~
-cp projects/notes.txt storage/downloads/</code></pre>
-                 (Check your Downloads folder. Target acquired.)
-            </section>
-
-            <section id="step8">
-                 <h2>Step 8: Automate Your Power (Scripts)</h2>
-                <p>Chain commands together. Write scripts. Make Termux do your chores.</p>
-                 <ol>
-                    <li><strong>Return to HQ:</strong> <code>cd ~</code></li>
-                    <li><strong>Draft the Plan (`nano` or the GUI hack from Step 5):</strong> Create a script file. Use <code>.fish</code> extension for Fish scripts.
-                        <pre><code># Option 1: Use the GUI Hack
-touch my_killer_script.fish
-open my_killer_script.fish
-# ... then do the copy/paste/cat dance ...
-
-# Option 2: Use nano if you must
-# nano my_killer_script.fish</code></pre>
-                    </li>
-                    <li><strong>Script Content (Example):</strong> Paste this into your editor (via GUI hack or nano). First line tells it to use Fish.
-                        <pre><code>#!/data/data/com.termux/files/usr/bin/fish
-
-echo "Executing Protocol Omega..."
-termux-toast -b black -c yellow -g middle "OPERATION IN PROGRESS"
-echo "System Check:"
-echo " - User: "(whoami)
-echo " - Location: "(pwd)
-ls -l | grep .txt # List only text files here
-termux-vibrate -d 100; sleep 0.2; termux-vibrate -d 200
-echo "Protocol Omega Complete."</code></pre>
-                    </li>
-                    <li><strong>Save It!</strong> (Use the GUI hack's `cat > my_killer_script.fish` method or `Ctrl+O`, Enter, `Ctrl+X` in nano).</li>
-                    <li><strong>Grant Execution Rights (`chmod`):</strong> Make it runnable.
-                        <pre><code>chmod +x my_killer_script.fish</code></pre>
-                    </li>
-                    <li><strong>UNLEASH IT:</strong>
-                        <pre><code>./my_killer_script.fish</code></pre>
-                    </li>
-                </ol>
-                <p>Watch your creation execute! That's automation, baby.</p>
-            </section>
-
-            <section id="tips">
-                <h2>💡 Elite Tactics & Shortcuts (Fish Fuelled!) 💡</h2>
-                <ul>
-                    <li><strong>Psychic Suggestions:</strong> Grey text? Right Arrow (→) or Ctrl+F accepts. Use constantly.</li>
-                    <li><strong>Tab Completion Abuse:</strong> Hit Tab after *everything*. Commands, paths, options. Let Fish do the work.</li>
-                    <li><strong>History Surfing (Up Arrow ↑):</strong> Start typing -> hit Up Arrow. Cycles through matching past commands.</li>
-                    <li><strong>Volume Keys = Modifiers:</strong> Usually VolDown=Ctrl, VolUp=Alt.</li>
-                    <li><strong><code>Ctrl + C</code>:</strong> ABORT! ABORT! Stops runaway commands.</li>
-                    <li><strong><code>Ctrl + D</code>:</strong> Logout / End input (vital for the `cat >` hack!).</li>
-                    <li><strong><code>Ctrl + L</code>:</strong> Clear screen clutter.</li>
-                    <li><strong><code>Alt + .</code> (Period):</strong> Slap the last argument from the previous command onto the current line. Sweet.</li>
-                    <li><strong>Save Hack Reminder:</strong> Edit in GUI -> Select All -> Copy -> `cat > filename` -> Paste -> **Ctrl+D**. Burn it in.</li>
-                    <li><strong>Fish Help:</strong> Type <code>help</code> for Fish docs, <code>help command</code> for specific Fish commands.</li>
-                    <li><strong>GTFO (`exit`):</strong> Type <code>exit</code> or Ctrl+D to close the session.</li>
-                </ul>
-            </section>
-
-            <section id="next">
-                 <h2>Level Up: Where to Go Next 🗺️</h2>
-                <p>You've cracked the surface. The rabbit hole goes deep. Now:</p>
-                <ul>
-                    <li>Pimp your Fish shell: Run <code>fish_config</code> in Termux to explore themes and prompts visually.</li>
-                    <li>Master more commands: <code>grep</code> (search text), <code>find</code> (find files), <code>curl</code>/<code>wget</code> (download stuff), <code>sed</code>/<code>awk</code> (text manipulation ninjutsu).</li>
-                    <li>Code on the go: <code>pkg install python nodejs ruby golang rust php</code> - whatever your poison.</li>
-                    <li>Control your code: <code>pkg install git</code>.</li>
-                    <li>Rule remote servers: <code>pkg install openssh</code>.</li>
-                    <li>Explore the Termux Wiki & Fish docs online. Google is your friend.</li>
-                    <li>Script everything! Automate backups, notifications, file management... Sky's the limit.</li>
-                </ul>
-                <p><strong>The best way to learn is to break things (safely!) and figure out how to fix 'em. Experiment. Push the limits. Go build something awesome.</strong></p>
-            </section>
-        </main>
-
-        <footer>
-            <p>Termux: Command the code. Control the system. Own your device.</p>
-            <p><strong>︻デ═—···</strong></p>
-            <p><small>Guide forged on: <time datetime="2025-04-16">April 16, 2025</time></small></p> </footer>
+    <div class="bg-animation"></div>
+    
+    <!-- Progress Bar -->
+    <div class="progress-bar">
+        <div class="progress-fill" id="progressBar"></div>
     </div>
 
-    <script src="js/scripts.js"></script>
+    <!-- Sidebar Toggle -->
+    <button class="sidebar-toggle" id="sidebarToggle">
+        <span style="font-size: 24px;">☰</span>
+    </button>
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <h3 style="color: var(--primary); margin-bottom: 20px;">🍺 Quick Nav, Buddy</h3>
+        <nav>
+            <div class="command-explorer">
+                <div class="command-item" onclick="scrollToSection('intro')">
+                    <span class="command-name">01.</span>
+                    <span class="command-desc">WTF is Termux?</span>
+                </div>
+                <div class="command-item" onclick="scrollToSection('install')">
+                    <span class="command-name">02.</span>
+                    <span class="command-desc">Getting This Bad Boy</span>
+                </div>
+                <div class="command-item" onclick="scrollToSection('first-launch')">
+                    <span class="command-name">03.</span>
+                    <span class="command-desc">First Time Setup</span>
+                </div>
+                <div class="command-item" onclick="scrollToSection('basics')">
+                    <span class="command-name">04.</span>
+                    <span class="command-desc">Terminal 101</span>
+                </div>
+                <div class="command-item" onclick="scrollToSection('commands')">
+                    <span class="command-name">05.</span>
+                    <span class="command-desc">Commands That Matter</span>
+                </div>
+                <div class="command-item" onclick="scrollToSection('packages')">
+                    <span class="command-name">06.</span>
+                    <span class="command-desc">Installing Cool Shit</span>
+                </div>
+                <div class="command-item" onclick="scrollToSection('examples')">
+                    <span class="command-name">07.</span>
+                    <span class="command-desc">Actually Doing Stuff</span>
+                </div>
+                <div class="command-item" onclick="scrollToSection('storage')">
+                    <span class="command-name">08.</span>
+                    <span class="command-desc">Phone Storage Access</span>
+                </div>
+                <div class="command-item" onclick="scrollToSection('advanced')">
+                    <span class="command-name">09.</span>
+                    <span class="command-desc">Next Level Shit</span>
+                </div>
+            </div>
+        </nav>
+        
+        <h3 style="color: var(--accent); margin-top: 30px; margin-bottom: 15px;">⚡ Quick Commands</h3>
+        <div style="background: var(--bg-dark); padding: 15px; border-radius: 8px;">
+            <p style="font-family: monospace; margin: 5px 0; cursor: pointer;" onclick="copyCommand('pkg update')">pkg update</p>
+            <p style="font-family: monospace; margin: 5px 0; cursor: pointer;" onclick="copyCommand('pkg install python')">pkg install python</p>
+            <p style="font-family: monospace; margin: 5px 0; cursor: pointer;" onclick="copyCommand('termux-setup-storage')">termux-setup-storage</p>
+        </div>
+    </aside>
+
+    <!-- Header -->
+    <header>
+        <h1>🚀 Yo Forrest! Let's Master Termux</h1>
+        <p class="subtitle">Your Personal Guide to Turning Your Phone Into a Hacker Machine</p>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content" id="mainContent">
+        <!-- Introduction Section -->
+        <section class="section" id="intro">
+            <h2><span class="icon">🍺</span> Alright Forrest, Let's Talk Termux</h2>
+            <p>So you want to run Linux on your phone? Hell yeah, brother. Termux is basically like having a full Linux computer in your pocket, except it's on your Android and you don't need to root anything. Pretty sick, right?</p>
+            
+            <div class="forrest-note info-box">
+                <h4>🎯 Real Talk - Why You'll Love This</h4>
+                <p>Look man, I know terminal stuff can seem intimidating at first, but trust me on this one. Once you get the hang of it, you'll be:</p>
+                <ul>
+                    <li>Running Python scripts while taking a dump</li>
+                    <li>SSHing into servers from the bar</li>
+                    <li>Automating boring phone tasks</li>
+                    <li>Looking like a absolute wizard to everyone else</li>
+                </ul>
+            </div>
+
+            <div class="interactive-demo">
+                <h4>🎮 Here's What It Looks Like</h4>
+                <div class="terminal-sim">
+                    <div style="color: #4a9eff;">$ <span id="typewriter"></span><span class="cursor">_</span></div>
+                    <div class="terminal-output" id="demoOutput"></div>
+                </div>
+            </div>
+
+            <div class="why-box info-box">
+                <h4>💡 The Bottom Line</h4>
+                <p>Termux turns your phone into a portable Linux box. No bullshit, no root required, just pure command-line power. You can code, hack, automate, and do all sorts of nerdy shit right from your phone.</p>
+            </div>
+        </section>
+
+        <!-- Installation Section -->
+        <section class="section" id="install">
+            <h2><span class="icon">📥</span> Getting Termux (The Right Way)</h2>
+            
+            <div class="warning info-box">
+                <h4>⚠️ FORREST, THIS IS IMPORTANT</h4>
+                <p>DO NOT get Termux from the Play Store. That version is old as fuck and broken. We're going to do this properly.</p>
+            </div>
+
+            <h3>🌟 The Easy Way - F-Droid</h3>
+            <p>F-Droid is like the Play Store but for open-source apps. It's legit and keeps everything updated.</p>
+            
+            <div class="command-explorer">
+                <div class="command-item" onclick="openModal('fdroid-details')">
+                    <span class="command-name">Step 1</span>
+                    <span class="command-desc">Get F-Droid first</span>
+                </div>
+                <div class="command-item" onclick="openModal('fdroid-install')">
+                    <span class="command-name">Step 2</span>
+                    <span class="command-desc">Install Termux from F-Droid</span>
+                </div>
+                <div class="command-item" onclick="openModal('fdroid-addons')">
+                    <span class="command-name">Step 3</span>
+                    <span class="command-desc">Grab the add-ons (optional but cool)</span>
+                </div>
+            </div>
+
+            <h3>🔧 The Manual Way (If You're Feeling Adventurous)</h3>
+            <p>You can also grab it straight from GitHub if you want:</p>
+            <a href="https://github.com/termux/termux-app/releases" class="btn" target="_blank">
+                GitHub Releases
+            </a>
+
+            <div class="tip info-box">
+                <h4>💡 Pro Tip from Your Boy</h4>
+                <p>Just use F-Droid, man. It's easier and you won't have to manually update shit. Plus, all the add-ons work together nicely.</p>
+            </div>
+        </section>
+
+        <!-- First Launch Section -->
+        <section class="section" id="first-launch">
+            <h2><span class="icon">🚀</span> First Time Opening This Bad Boy</h2>
+            
+            <h3>What You're Gonna See</h3>
+            <p>When you fire up Termux for the first time, you'll see some text that looks like this:</p>
+            
+            <div class="code-container">
+                <div class="code-header">
+                    <span class="code-label">Welcome Screen</span>
+                    <button class="copy-btn" onclick="copyCode(this, 'Welcome to Termux!')">
+                        <span>📋</span> Copy
+                    </button>
+                </div>
+                <div class="code-block" style="color: #00ff88;">Welcome to Termux!
+
+Wiki:            https://wiki.termux.com
+Community:       https://termux.com/community
+Packages:        https://packages.termux.org/
+
+Working with packages:
+ * Search:    pkg search &lt;query&gt;
+ * Install:   pkg install &lt;package&gt;
+ * Upgrade:   pkg upgrade
+
+$</div>
+            </div>
+
+            <div class="forrest-note info-box">
+                <h4>🤔 Don't Panic!</h4>
+                <p>I know it looks like some Matrix shit, but that dollar sign ($) just means "hey, I'm ready for your commands". Think of it like the terminal is saying "What's up? What do you need?"</p>
+            </div>
+
+            <h3>🎯 First Thing We Gotta Do</h3>
+            <p>Before we do anything fun, we need to update this thing. It's like updating your apps, but cooler:</p>
+
+            <div class="code-container">
+                <div class="code-header">
+                    <span class="code-label">The Magic Update Command</span>
+                    <button class="copy-btn" onclick="copyCode(this, 'pkg update && pkg upgrade')">
+                        <span>📋</span> Copy This!
+                    </button>
+                </div>
+                <div class="code-block">pkg update && pkg upgrade</div>
+            </div>
+
+            <div class="why-box info-box">
+                <h4>💡 What The Hell Does That Mean?</h4>
+                <div style="background: rgba(0,0,0,0.3); padding: 15px; border-radius: 8px; margin-top: 10px;">
+                    <p><code style="color: var(--primary);">pkg</code> → Package manager (think of it as Termux's app store)</p>
+                    <p><code style="color: var(--primary);">update</code> → Check what's new</p>
+                    <p><code style="color: var(--primary);">&&</code> → "AND THEN" (do the next thing if the first thing worked)</p>
+                    <p><code style="color: var(--primary);">upgrade</code> → Actually install the updates</p>
+                </div>
+                <p style="margin-top: 10px;">When it asks you "Do you want to continue? [Y/n]" just hit Y and Enter. Easy money.</p>
+            </div>
+
+            <h3>🎨 Making It Look Less Boring</h3>
+            <p>Want to change how it looks? We got options:</p>
+            
+            <div class="command-explorer">
+                <div class="command-item" onclick="showCommand('termux-style')">
+                    <span class="command-name">Change Colors</span>
+                    <span class="command-desc">Make it look cool</span>
+                </div>
+                <div class="command-item" onclick="showCommand('extra-keys')">
+                    <span class="command-name">Extra Keys</span>
+                    <span class="command-desc">Get those special buttons</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Terminal Basics Section -->
+        <section class="section" id="basics">
+            <h2><span class="icon">🖥️</span> Terminal Basics (Don't Worry, It's Easy)</h2>
+            
+            <h3>Think of It Like Texting Your Phone</h3>
+            <p>Seriously, Forrest. The terminal is just you having a text conversation with your phone. You type something, hit Enter, and it does the thing or tells you something back.</p>
+
+            <div class="forrest-note info-box">
+                <h4>🎮 The Controls You Actually Need</h4>
+                <p>Here's the shit you'll use all the time:</p>
+            </div>
+
+            <div class="interactive-demo">
+                <table style="width: 100%; background: var(--bg-code); border-radius: 8px;">
+                    <tr>
+                        <th style="padding: 15px; border-bottom: 1px solid var(--border);">What You Want</th>
+                        <th style="padding: 15px; border-bottom: 1px solid var(--border);">How to Do It</th>
+                        <th style="padding: 15px; border-bottom: 1px solid var(--border);">Why You'd Use It</th>
+                    </tr>
+                    <tr>
+                        <td style="padding: 15px;">Clear all the text</td>
+                        <td style="padding: 15px; font-family: monospace; color: var(--primary);">clear or Ctrl+L</td>
+                        <td style="padding: 15px;">When shit gets messy</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 15px;">Stop something running</td>
+                        <td style="padding: 15px; font-family: monospace; color: var(--primary);">Ctrl+C</td>
+                        <td style="padding: 15px;">When you fucked up</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 15px;">Previous command</td>
+                        <td style="padding: 15px; font-family: monospace; color: var(--primary);">↑ arrow</td>
+                        <td style="padding: 15px;">Lazy typing FTW</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 15px;">Exit Termux</td>
+                        <td style="padding: 15px; font-family: monospace; color: var(--primary);">exit</td>
+                        <td style="padding: 15px;">Peace out</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="tip info-box">
+                <h4>🎯 Termux Keyboard Hack</h4>
+                <p>Yo, check this out - you can swipe from the left edge to get extra keys, or use:</p>
+                <ul>
+                    <li>Volume Up + Q = Ctrl+C (stop shit)</li>
+                    <li>Volume Up + W = Up arrow (previous command)</li>
+                    <li>Volume Down + A = Left arrow</li>
+                </ul>
+                <p>Or just get Hacker's Keyboard from F-Droid. It's dope.</p>
+            </div>
+        </section>
+
+        <!-- Essential Commands Section -->
+        <section class="section" id="commands">
+            <h2><span class="icon">📝</span> Commands You Actually Need to Know</h2>
+            
+            <h3>🗺️ Navigation (Moving Around)</h3>
+            
+            <!-- pwd command -->
+            <div style="margin-bottom: 30px;">
+                <h4 style="color: var(--primary); margin-bottom: 15px;">Where The Hell Am I? - pwd</h4>
+                <div class="code-container">
+                    <div class="code-header">
+                        <span class="code-label">Show Current Location</span>
+                        <button class="copy-btn" onclick="copyCode(this, 'pwd')">
+                            <span>📋</span> Copy
+                        </button>
+                    </div>
+                    <div class="code-block">pwd</div>
+                </div>
+                <div class="forrest-note info-box">
+                    <h4>💡 What's This Do?</h4>
+                    <p><strong>pwd</strong> = "Print Working Directory" (fancy way of saying "where am I?")</p>
+                    <p>It'll show something like: <code>/data/data/com.termux/files/home</code></p>
+                    <p>That's your home folder in Termux. Think of it as your personal space.</p>
+                </div>
+            </div>
+
+            <!-- ls command -->
+            <div style="margin-bottom: 30px;">
+                <h4 style="color: var(--primary); margin-bottom: 15px;">What's In Here? - ls</h4>
+                <div class="code-container">
+                    <div class="code-header">
+                        <span class="code-label">List All The Shit</span>
+                        <button class="copy-btn" onclick="copyCode(this, 'ls -la')">
+                            <span>📋</span> Copy
+                        </button>
+                    </div>
+                    <div class="code-block">ls -la</div>
+                </div>
+                <div class="why-box info-box">
+                    <h4>💡 The Options Breakdown</h4>
+                    <div style="display: grid; grid-template-columns: 100px 1fr; gap: 10px; margin-top: 10px;">
+                        <code style="color: var(--accent);">ls</code>
+                        <span>Show me what's here</span>
+                        <code style="color: var(--accent);">-l</code>
+                        <span>Long format (more details)</span>
+                        <code style="color: var(--accent);">-a</code>
+                        <span>ALL files (even hidden ones)</span>
+                    </div>
+                    <p style="margin-top: 15px;">Pro tip: If nothing shows up, that's normal for a fresh install. Your folder is just empty, bro.</p>
+                </div>
+            </div>
+
+            <!-- cd command -->
+            <div style="margin-bottom: 30px;">
+                <h4 style="color: var(--primary); margin-bottom: 15px;">Moving Around - cd</h4>
+                <p>This is how you navigate. Think of it like clicking folders, but with text:</p>
+                <div class="command-explorer">
+                    <div class="command-item" onclick="showCommandModal('cd ~', 'Goes back to your home folder from anywhere')">
+                        <span class="command-name">cd ~</span>
+                        <span class="command-desc">Go home</span>
+                    </div>
+                    <div class="command-item" onclick="showCommandModal('cd ..', 'Goes back one folder (like hitting the back button)')">
+                        <span class="command-name">cd ..</span>
+                        <span class="command-desc">Go back</span>
+                    </div>
+                    <div class="command-item" onclick="showCommandModal('cd foldername', 'Enter a specific folder')">
+                        <span class="command-name">cd projects</span>
+                        <span class="command-desc">Enter folder</span>
+                    </div>
+                </div>
+            </div>
+
+            <h3>📁 File Stuff</h3>
+            
+            <div class="forrest-note info-box">
+                <h4>🎯 The Commands That Matter</h4>
+                <p>Here's what you'll actually use, Forrest:</p>
+            </div>
+
+            <div class="interactive-demo">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span class="code-label">Make a File</span>
+                            <button class="copy-btn" onclick="copyCode(this, 'touch filename.txt')">
+                                <span>📋</span> Copy
+                            </button>
+                        </div>
+                        <div class="code-block">touch filename.txt</div>
+                    </div>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span class="code-label">Make a Folder</span>
+                            <button class="copy-btn" onclick="copyCode(this, 'mkdir foldername')">
+                                <span>📋</span> Copy
+                            </button>
+                        </div>
+                        <div class="code-block">mkdir foldername</div>
+                    </div>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span class="code-label">Copy Shit</span>
+                            <button class="copy-btn" onclick="copyCode(this, 'cp source.txt dest.txt')">
+                                <span>📋</span> Copy
+                            </button>
+                        </div>
+                        <div class="code-block">cp source.txt dest.txt</div>
+                    </div>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span class="code-label">Move/Rename</span>
+                            <button class="copy-btn" onclick="copyCode(this, 'mv oldname.txt newname.txt')">
+                                <span>📋</span> Copy
+                            </button>
+                        </div>
+                        <div class="code-block">mv oldname.txt newname.txt</div>
+                    </div>
+                </div>
+            </div>
+
+            <h3>✏️ Editing Files (The Easy Way)</h3>
+            <div class="tip info-box">
+                <h4>🎯 Using Nano (It's Not Scary)</h4>
+                <p>Nano is the easiest text editor. Here's the cheat sheet:</p>
+                <div class="code-container">
+                    <div class="code-header">
+                        <span class="code-label">Open a File</span>
+                        <button class="copy-btn" onclick="copyCode(this, 'nano myfile.txt')">
+                            <span>📋</span> Copy
+                        </button>
+                    </div>
+                    <div class="code-block">nano myfile.txt</div>
+                </div>
+                <ul style="margin-top: 15px;">
+                    <li><code>Ctrl+O</code> → Save (then hit Enter)</li>
+                    <li><code>Ctrl+X</code> → Exit</li>
+                    <li><code>Ctrl+K</code> → Cut line</li>
+                    <li><code>Ctrl+U</code> → Paste</li>
+                </ul>
+                <p style="margin-top: 15px;">That's it. Seriously. Don't overthink it.</p>
+            </div>
+        </section>
+
+        <!-- Package Management Section -->
+        <section class="section" id="packages">
+            <h2><span class="icon">📦</span> Installing Cool Shit</h2>
+            
+            <h3>The Package Manager (Your New Best Friend)</h3>
+            <p>Alright Forrest, <code>pkg</code> is basically like the app store for Termux. Want Python? Git? Node.js? This is how you get 'em.</p>
+
+            <div class="command-explorer">
+                <h4>Essential Package Commands</h4>
+                <div class="command-item" onclick="runPackageDemo('search')">
+                    <span class="command-name">pkg search</span>
+                    <span class="command-desc">Find stuff to install</span>
+                </div>
+                <div class="command-item" onclick="runPackageDemo('install')">
+                    <span class="command-name">pkg install</span>
+                    <span class="command-desc">Actually install it</span>
+                </div>
+                <div class="command-item" onclick="runPackageDemo('list')">
+                    <span class="command-name">pkg list-installed</span>
+                    <span class="command-desc">See what you got</span>
+                </div>
+            </div>
+
+            <h3>🚀 The Starter Pack</h3>
+            <p>Here's what I recommend you install right off the bat:</p>
+            
+            <div class="code-container">
+                <div class="code-header">
+                    <span class="code-label">Copy This Whole Thing</span>
+                    <button class="copy-btn" onclick="copyCode(this, 'pkg install git wget curl nano python nodejs')">
+                        <span>📋</span> Get Em All!
+                    </button>
+                </div>
+                <div class="code-block">pkg install git wget curl nano python nodejs</div>
+            </div>
+
+            <div class="why-box info-box">
+                <h4>💡 What You're Getting</h4>
+                <div style="display: grid; grid-template-columns: 120px 1fr; gap: 15px; margin-top: 15px;">
+                    <code style="color: var(--accent);">git</code>
+                    <span>For cloning repos and version control</span>
+                    <code style="color: var(--accent);">wget/curl</code>
+                    <span>Download files from the internet</span>
+                    <code style="color: var(--accent);">nano</code>
+                    <span>Easy text editor (trust me on this)</span>
+                    <code style="color: var(--accent);">python</code>
+                    <span>For all your Python scripts</span>
+                    <code style="color: var(--accent);">nodejs</code>
+                    <span>JavaScript on the server side</span>
+                </div>
+            </div>
+
+            <div class="forrest-note info-box">
+                <h4>🍺 Real Talk</h4>
+                <p>When it asks "Do you want to continue?" just hit Y. It's gonna download a bunch of shit. Grab a beer, it'll take a minute.</p>
+            </div>
+        </section>
+
+        <!-- Practical Examples Section -->
+        <section class="section" id="examples">
+            <h2><span class="icon">🛠️</span> Actually Doing Cool Shit</h2>
+            
+            <h3>🐍 Example 1: Your First Python Script</h3>
+            <p>Let's make something that actually does something:</p>
+            
+            <div class="interactive-demo">
+                <ol>
+                    <li>Create a Python file:
+                        <div class="code-container">
+                            <div class="code-header">
+                                <span class="code-label">Make the File</span>
+                                <button class="copy-btn" onclick="copyCode(this, 'nano forrest_script.py')">
+                                    <span>📋</span> Copy
+                                </button>
+                            </div>
+                            <div class="code-block">nano forrest_script.py</div>
+                        </div>
+                    </li>
+                    <li>Type this shit in (or copy it):
+                        <div class="code-container">
+                            <div class="code-header">
+                                <span class="code-label">The Code</span>
+                                <button class="copy-btn" onclick="copyCode(this, `import random
+
+print('Yo Forrest! Welcome to Termux Python!')
+print('Let me generate your lucky number...')
+
+lucky = random.randint(1, 100)
+print(f'Your lucky number is: {lucky}')
+
+if lucky > 50:
+    print('Damn, that\\'s a big one!')
+else:
+    print('Small number, big dreams!')`)">
+                                    <span>📋</span> Copy
+                                </button>
+                            </div>
+                            <div class="code-block" style="color: #e0e0e0;">import random
+
+print('Yo Forrest! Welcome to Termux Python!')
+print('Let me generate your lucky number...')
+
+lucky = random.randint(1, 100)
+print(f'Your lucky number is: {lucky}')
+
+if lucky > 50:
+    print('Damn, that\'s a big one!')
+else:
+    print('Small number, big dreams!')</div>
+                        </div>
+                    </li>
+                    <li>Save and exit: <code>Ctrl+O</code>, Enter, <code>Ctrl+X</code></li>
+                    <li>Run that bad boy:
+                        <div class="code-container">
+                            <div class="code-header">
+                                <span class="code-label">Execute!</span>
+                                <button class="copy-btn" onclick="copyCode(this, 'python forrest_script.py')">
+                                    <span>📋</span> Copy
+                                </button>
+                            </div>
+                            <div class="code-block">python forrest_script.py</div>
+                        </div>
+                    </li>
+                </ol>
+            </div>
+
+            <div class="forrest-note info-box">
+                <h4>🎉 Boom!</h4>
+                <p>You just ran Python on your fucking phone. How cool is that?</p>
+            </div>
+
+            <h3>🌐 Example 2: Quick Web Server</h3>
+            <p>Want to share files with your computer? Check this out:</p>
+            
+            <div class="code-container">
+                <div class="code-header">
+                    <span class="code-label">One Line Web Server</span>
+                    <button class="copy-btn" onclick="copyCode(this, 'python -m http.server 8080')">
+                        <span>📋</span> Copy
+                    </button>
+                </div>
+                <div class="code-block">python -m http.server 8080</div>
+            </div>
+            
+            <div class="tip info-box">
+                <h4>💡 How to Use This</h4>
+                <ol>
+                    <li>Run that command in a folder with files</li>
+                    <li>Find your phone's IP: <code>ip addr | grep wlan0</code></li>
+                    <li>On your computer, go to: <code>http://[phone-ip]:8080</code></li>
+                    <li>Boom! Access your phone files from your computer</li>
+                    <li>Hit <code>Ctrl+C</code> to stop it</li>
+                </ol>
+            </div>
+
+            <h3>🤖 Example 3: Lazy Man's Backup</h3>
+            <p>Let's make a script that backs up your important shit:</p>
+            
+            <div class="code-container">
+                <div class="code-header">
+                    <span class="code-label">backup.sh</span>
+                    <button class="copy-btn" onclick="copyCode(this, `#!/bin/bash
+# Forrest's Backup Script
+
+echo "🔥 Starting Forrest's backup..."
+DATE=$(date +%Y%m%d_%H%M%S)
+BACKUP_DIR=~/backups/$DATE
+
+mkdir -p $BACKUP_DIR
+echo "📁 Created backup folder: $BACKUP_DIR"
+
+# Copy your important stuff here
+cp -r ~/projects $BACKUP_DIR/ 2>/dev/null
+cp -r ~/scripts $BACKUP_DIR/ 2>/dev/null
+
+echo "✅ Backup complete! Check $BACKUP_DIR"
+echo "🍺 Go grab a beer, you earned it!"`)">
+                        <span>📋</span> Copy
+                    </button>
+                </div>
+                <div class="code-block" style="color: #e0e0e0;">#!/bin/bash
+# Forrest's Backup Script
+
+echo "🔥 Starting Forrest's backup..."
+DATE=$(date +%Y%m%d_%H%M%S)
+BACKUP_DIR=~/backups/$DATE
+
+mkdir -p $BACKUP_DIR
+echo "📁 Created backup folder: $BACKUP_DIR"
+
+# Copy your important stuff here
+cp -r ~/projects $BACKUP_DIR/ 2>/dev/null
+cp -r ~/scripts $BACKUP_DIR/ 2>/dev/null
+
+echo "✅ Backup complete! Check $BACKUP_DIR"
+echo "🍺 Go grab a beer, you earned it!"</div>
+            </div>
+
+            <p style="margin-top: 20px;">To make it executable and run it:</p>
+            <div class="code-container">
+                <div class="code-header">
+                    <span class="code-label">Make It Work</span>
+                    <button class="copy-btn" onclick="copyCode(this, 'chmod +x backup.sh && ./backup.sh')">
+                        <span>📋</span> Copy
+                    </button>
+                </div>
+                <div class="code-block">chmod +x backup.sh && ./backup.sh</div>
+            </div>
+        </section>
+
+        <!-- Storage Access Section -->
+        <section class="section" id="storage">
+            <h2><span class="icon">💾</span> Accessing Your Phone Files</h2>
+            
+            <h3>The Magic Command</h3>
+            <p>By default, Termux can't see your regular phone files. But we can fix that real quick:</p>
+            
+            <div class="code-container">
+                <div class="code-header">
+                    <span class="code-label">Enable Storage Access</span>
+                    <button class="copy-btn" onclick="copyCode(this, 'termux-setup-storage')">
+                        <span>📋</span> Copy This!
+                    </button>
+                </div>
+                <div class="code-block">termux-setup-storage</div>
+            </div>
+
+            <div class="warning info-box">
+                <h4>⚠️ Heads Up</h4>
+                <p>Your phone's gonna ask for storage permission. Just hit "Allow" - we're not doing anything sketchy, just connecting Termux to your files.</p>
+            </div>
+
+            <h3>📂 What You Get</h3>
+            <p>After running that command, you'll have these shortcuts:</p>
+            
+            <div class="command-explorer">
+                <div class="command-item" onclick="showPath('~/storage/downloads')">
+                    <span class="command-name">downloads</span>
+                    <span class="command-desc">Your Downloads folder</span>
+                </div>
+                <div class="command-item" onclick="showPath('~/storage/dcim')">
+                    <span class="command-name">dcim</span>
+                    <span class="command-desc">Camera photos</span>
+                </div>
+                <div class="command-item" onclick="showPath('~/storage/music')">
+                    <span class="command-name">music</span>
+                    <span class="command-desc">Your tunes</span>
+                </div>
+                <div class="command-item" onclick="showPath('~/storage/shared')">
+                    <span class="command-name">shared</span>
+                    <span class="command-desc">Everything else</span>
+                </div>
+            </div>
+
+            <div class="forrest-note info-box">
+                <h4>🔥 Cool Shit You Can Do Now</h4>
+                <p>Check this out - organize your downloads automatically:</p>
+                <div class="code-container">
+                    <div class="code-header">
+                        <span class="code-label">Auto-Organize Downloads</span>
+                        <button class="copy-btn" onclick="copyCode(this, `cd ~/storage/downloads
+mkdir -p Images Docs Videos
+mv *.jpg *.png Images/ 2>/dev/null
+mv *.pdf *.docx Docs/ 2>/dev/null
+mv *.mp4 *.mkv Videos/ 2>/dev/null
+echo 'Downloads organized!'`)">
+                            <span>📋</span> Copy
+                        </button>
+                    </div>
+                    <div class="code-block" style="color: #e0e0e0;">cd ~/storage/downloads
+mkdir -p Images Docs Videos
+mv *.jpg *.png Images/ 2>/dev/null
+mv *.pdf *.docx Docs/ 2>/dev/null
+mv *.mp4 *.mkv Videos/ 2>/dev/null
+echo 'Downloads organized!'</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Advanced Topics Section -->
+        <section class="section" id="advanced">
+            <h2><span class="icon">🚀</span> Next Level Shit</h2>
+            
+            <h3>🔐 SSH Into Your Phone</h3>
+            <p>Want to control your phone from your computer? Hell yeah, let's do it:</p>
+            
+            <div class="interactive-demo">
+                <ol>
+                    <li>Install SSH:
+                        <div class="code-container">
+                            <div class="code-header">
+                                <span class="code-label">Get OpenSSH</span>
+                                <button class="copy-btn" onclick="copyCode(this, 'pkg install openssh')">
+                                    <span>📋</span> Copy
+                                </button>
+                            </div>
+                            <div class="code-block">pkg install openssh</div>
+                        </div>
+                    </li>
+                    <li>Set a password:
+                        <div class="code-container">
+                            <div class="code-header">
+                                <span class="code-label">Set Password</span>
+                                <button class="copy-btn" onclick="copyCode(this, 'passwd')">
+                                    <span>📋</span> Copy
+                                </button>
+                            </div>
+                            <div class="code-block">passwd</div>
+                        </div>
+                    </li>
+                    <li>Start the SSH server:
+                        <div class="code-container">
+                            <div class="code-header">
+                                <span class="code-label">Fire It Up</span>
+                                <button class="copy-btn" onclick="copyCode(this, 'sshd')">
+                                    <span>📋</span> Copy
+                                </button>
+                            </div>
+                            <div class="code-block">sshd</div>
+                        </div>
+                    </li>
+                </ol>
+                
+                <div class="tip info-box">
+                    <h4>💡 How to Connect</h4>
+                    <p>From your computer, use: <code>ssh -p 8022 user@[phone-ip]</code></p>
+                    <p>Find your phone's IP with: <code>ip addr | grep wlan0</code></p>
+                </div>
+            </div>
+
+            <h3>⚡ Termux API - Control Your Phone!</h3>
+            <p>This is where shit gets really fun. You can control your phone's hardware from the terminal:</p>
+            
+            <div class="code-container">
+                <div class="code-header">
+                    <span class="code-label">Install API Package</span>
+                    <button class="copy-btn" onclick="copyCode(this, 'pkg install termux-api')">
+                        <span>📋</span> Copy
+                    </button>
+                </div>
+                <div class="code-block">pkg install termux-api</div>
+            </div>
+
+            <div class="forrest-note info-box">
+                <h4>⚠️ Important!</h4>
+                <p>You also need to install the "Termux:API" app from F-Droid. It's a separate app that works with this package.</p>
+            </div>
+            
+            <div class="command-explorer" style="margin-top: 20px;">
+                <h4>Cool API Commands</h4>
+                <div class="command-item" onclick="showAPICommand('termux-battery-status')">
+                    <span class="command-name">battery-status</span>
+                    <span class="command-desc">Check battery info</span>
+                </div>
+                <div class="command-item" onclick="showAPICommand('termux-camera-photo photo.jpg')">
+                    <span class="command-name">camera-photo</span>
+                    <span class="command-desc">Take a photo</span>
+                </div>
+                <div class="command-item" onclick="showAPICommand('termux-clipboard-get')">
+                    <span class="command-name">clipboard-get</span>
+                    <span class="command-desc">Read clipboard</span>
+                </div>
+                <div class="command-item" onclick="showAPICommand('termux-notification -t \"Yo Forrest!\" -c \"Task complete!\"')">
+                    <span class="command-name">notification</span>
+                    <span class="command-desc">Send notification</span>
+                </div>
+                <div class="command-item" onclick="showAPICommand('termux-torch on')">
+                    <span class="command-name">torch</span>
+                    <span class="command-desc">Flashlight control</span>
+                </div>
+            </div>
+
+            <h3>🎨 Make It Pretty</h3>
+            <p>Want to customize how Termux looks? We got you:</p>
+            
+            <div class="code-container">
+                <div class="code-header">
+                    <span class="code-label">Change Colors & Fonts</span>
+                    <button class="copy-btn" onclick="copyCode(this, 'termux-style')">
+                        <span>📋</span> Copy
+                    </button>
+                </div>
+                <div class="code-block">termux-style</div>
+            </div>
+
+            <div class="tip info-box">
+                <h4>💡 Other Cool Customizations</h4>
+                <ul>
+                    <li>Long press → More → Style → Change font</li>
+                    <li>Enable extra keys row in settings</li>
+                    <li>Install zsh and oh-my-zsh for a fancy prompt</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Troubleshooting Section -->
+        <section class="section">
+            <h2><span class="icon">🔧</span> When Shit Goes Wrong</h2>
+            
+            <h3>Common Problems & How to Fix 'Em</h3>
+            
+            <div class="warning info-box">
+                <h4>📱 "Permission Denied" Bullshit</h4>
+                <p><strong>The Problem:</strong> Can't access some folders</p>
+                <p><strong>The Fix:</strong> You probably forgot to run <code>termux-setup-storage</code>. Also, Termux can't access everything - work in your home folder or storage folders.</p>
+            </div>
+
+            <div class="warning info-box">
+                <h4>📦 "Package Not Found" Errors</h4>
+                <p><strong>The Problem:</strong> Can't install shit</p>
+                <p><strong>The Fix:</strong></p>
+                <ol>
+                    <li>Run <code>pkg update</code> first</li>
+                    <li>Make sure you're connected to WiFi</li>
+                    <li>Try <code>termux-change-repo</code> to switch mirrors</li>
+                </ol>
+            </div>
+
+            <div class="warning info-box">
+                <h4>⌨️ Keyboard Acting Weird</h4>
+                <p><strong>The Problem:</strong> Can't use Ctrl or special keys</p>
+                <p><strong>The Fix:</strong> Get Hacker's Keyboard from F-Droid, or use the Volume+Key combos I showed you earlier.</p>
+            </div>
+
+            <div class="forrest-note info-box">
+                <h4>🍺 Still Stuck?</h4>
+                <p>Hit me up, man. Or check out r/termux on Reddit - those nerds know everything.</p>
+            </div>
+        </section>
+
+        <!-- Resources Section -->
+        <section class="section">
+            <h2><span class="icon">📚</span> Where to Go From Here</h2>
+            
+            <h3>🎯 Shit to Learn Next</h3>
+            <div class="command-explorer">
+                <div class="command-item">
+                    <span class="command-name">Bash Scripting</span>
+                    <span class="command-desc">Automate everything</span>
+                </div>
+                <div class="command-item">
+                    <span class="command-name">Git & GitHub</span>
+                    <span class="command-desc">Version control like a pro</span>
+                </div>
+                <div class="command-item">
+                    <span class="command-name">Python Projects</span>
+                    <span class="command-desc">Build actual useful stuff</span>
+                </div>
+                <div class="command-item">
+                    <span class="command-name">tmux</span>
+                    <span class="command-desc">Multiple terminal sessions</span>
+                </div>
+            </div>
+
+            <h3>🔗 Useful Links</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 20px;">
+                <a href="https://wiki.termux.com" class="btn" target="_blank">Official Wiki</a>
+                <a href="https://reddit.com/r/termux" class="btn" target="_blank">Reddit Community</a>
+                <a href="https://github.com/termux" class="btn" target="_blank">GitHub Stuff</a>
+                <a href="https://t.me/termux" class="btn" target="_blank">Telegram Group</a>
+            </div>
+
+            <div class="forrest-note info-box" style="margin-top: 30px;">
+                <h4>🌟 Final Words, Forrest</h4>
+                <p>Dude, you got this. The terminal might seem weird at first, but once you get comfortable with it, you'll wonder how you ever lived without it.</p>
+                <p style="margin-top: 15px;">Remember:</p>
+                <ul>
+                    <li>You can't break your phone with Termux</li>
+                    <li>Google is your friend when you're stuck</li>
+                    <li>The more you use it, the easier it gets</li>
+                    <li>It's okay to forget commands - that's what this guide is for</li>
+                </ul>
+                <p style="margin-top: 20px; text-align: center; font-style: italic; font-size: 1.2em;">
+                    <span class="forrest-special">Now go forth and hack the planet! 🚀</span>
+                </p>
+            </div>
+        </section>
+    </main>
+
+    <!-- Floating Action Button -->
+    <div class="fab" onclick="scrollToTop()">
+        ↑
+    </div>
+
+    <!-- Modal System -->
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">×</button>
+            <div id="modalContent"></div>
+        </div>
+    </div>
+
+    <!-- Loading Indicator -->
+    <div class="loader" id="loader">
+        <div class="loader-circle"></div>
+    </div>
+
+    <script>
+        // Sidebar Toggle
+        const sidebar = document.getElementById('sidebar');
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        const mainContent = document.getElementById('mainContent');
+        
+        sidebarToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('active');
+            sidebarToggle.classList.toggle('active');
+            mainContent.classList.toggle('shifted');
+        });
+
+        // Progress Bar
+        window.addEventListener('scroll', () => {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById('progressBar').style.width = scrolled + '%';
+        });
+
+        // Copy functionality
+        function copyCode(button, text) {
+            navigator.clipboard.writeText(text).then(() => {
+                button.classList.add('copied');
+                const originalText = button.innerHTML;
+                button.innerHTML = '<span>✓</span> Copied!';
+                setTimeout(() => {
+                    button.classList.remove('copied');
+                    button.innerHTML = originalText;
+                }, 2000);
+            });
+        }
+
+        function copyCommand(cmd) {
+            navigator.clipboard.writeText(cmd).then(() => {
+                showNotification('Command copied! 🎉');
+            });
+        }
+
+        // Modal functions
+        function openModal(content) {
+            const modal = document.getElementById('modal');
+            const modalContent = document.getElementById('modalContent');
+            
+            const modalData = {
+                'fdroid-details': `
+                    <h3>Getting F-Droid (The Easy Way)</h3>
+                    <p>Alright Forrest, here's what you do:</p>
+                    <ol>
+                        <li>Go to <a href="https://f-droid.org" target="_blank">f-droid.org</a> on your phone</li>
+                        <li>Hit that big ass "Download F-Droid" button</li>
+                        <li>Your browser will download the APK</li>
+                        <li>Open your Downloads and tap that APK</li>
+                        <li>Android's gonna whine about "unknown sources" - just allow it</li>
+                    </ol>
+                    <div class="tip info-box">
+                        <h4>💡 Why We Trust F-Droid</h4>
+                        <p>It's all open-source apps, no bullshit, no ads, no tracking. Just good software.</p>
+                    </div>
+                `,
+                'fdroid-install': `
+                    <h3>Installing Termux from F-Droid</h3>
+                    <p>Once you got F-Droid installed:</p>
+                    <ol>
+                        <li>Open F-Droid</li>
+                        <li>First time? It'll update its database (takes a minute)</li>
+                        <li>Search for "Termux"</li>
+                        <li>Tap on Termux (by Fredrik Fornwall)</li>
+                        <li>Hit "Install"</li>
+                        <li>Wait for it... boom! You're done</li>
+                    </ol>
+                    <div class="warning info-box">
+                        <h4>⚠️ Remember This</h4>
+                        <p>If you get Termux from F-Droid, get ALL the add-ons from F-Droid too. Don't mix sources or shit won't work right.</p>
+                    </div>
+                `,
+                'fdroid-addons': `
+                    <h3>Cool Add-ons You Might Want</h3>
+                    <p>These are optional but pretty dope:</p>
+                    <div class="command-explorer">
+                        <div class="command-item">
+                            <span class="command-name">Termux:API</span>
+                            <span class="command-desc">Control phone hardware (camera, SMS, etc)</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-name">Termux:Styling</span>
+                            <span class="command-desc">Change colors and fonts</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-name">Termux:Widget</span>
+                            <span class="command-desc">Run scripts from home screen</span>
+                        </div>
+                        <div class="command-item">
+                            <span class="command-name">Termux:Boot</span>
+                            <span class="command-desc">Run stuff when phone starts</span>
+                        </div>
+                    </div>
+                    <p style="margin-top: 20px;">Just search for these in F-Droid and install the ones you want. I'd at least get the API one - it's sick.</p>
+                `
+            };
+            
+            modalContent.innerHTML = modalData[content] || '<p>Content not found</p>';
+            modal.style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('modal').style.display = 'none';
+        }
+
+        // Click outside modal to close
+        window.onclick = function(event) {
+            const modal = document.getElementById('modal');
+            if (event.target == modal) {
+                closeModal();
+            }
+        }
+
+        // Smooth scrolling
+        function scrollToSection(sectionId) {
+            const section = document.getElementById(sectionId);
+            section.scrollIntoView({ behavior: 'smooth' });
+            
+            // Close sidebar on mobile
+            if (window.innerWidth <= 768) {
+                sidebar.classList.remove('active');
+                sidebarToggle.classList.remove('active');
+                mainContent.classList.remove('shifted');
+            }
+        }
+
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Show notification
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                bottom: 100px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: var(--success);
+                color: var(--bg-dark);
+                padding: 15px 30px;
+                border-radius: 8px;
+                font-weight: bold;
+                z-index: 3000;
+                animation: slideUp 0.3s, slideDown 0.3s 2s forwards;
+            `;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => notification.remove(), 2500);
+        }
+
+        // Forrest's special typewriter
+        const forrestCommands = [
+            'ls -la',
+            'python forrest_script.py',
+            'cd ~/projects',
+            'git status',
+            'echo "Forrest is awesome"',
+            'termux-torch on'
+        ];
+        
+        let commandIndex = 0;
+        let charIndex = 0;
+        let isDeleting = false;
+        
+        function typeWriter() {
+            const element = document.getElementById('typewriter');
+            if (!element) return;
+            
+            const currentCommand = forrestCommands[commandIndex];
+            
+            if (!isDeleting && charIndex < currentCommand.length) {
+                element.textContent = currentCommand.substring(0, charIndex + 1);
+                charIndex++;
+                setTimeout(typeWriter, 100);
+            } else if (isDeleting && charIndex > 0) {
+                element.textContent = currentCommand.substring(0, charIndex - 1);
+                charIndex--;
+                setTimeout(typeWriter, 50);
+            } else if (charIndex === currentCommand.length && !isDeleting) {
+                isDeleting = true;
+                setTimeout(typeWriter, 2000);
+            } else if (charIndex === 0 && isDeleting) {
+                isDeleting = false;
+                commandIndex = (commandIndex + 1) % forrestCommands.length;
+                setTimeout(typeWriter, 500);
+            }
+        }
+        
+        // Start typewriter effect
+        setTimeout(typeWriter, 1000);
+
+        // Show command details
+        function showCommand(cmd) {
+            const commandDetails = {
+                'termux-style': 'This opens a menu to change colors and fonts. Pretty cool!',
+                'extra-keys': 'Go to Settings → Keyboard → Extra Keys Row. Trust me, you want this.',
+            };
+            showNotification(commandDetails[cmd] || 'Try it and see what happens! 😎');
+        }
+
+        // Show command modal
+        function showCommandModal(command, description) {
+            const modalContent = `
+                <h3>Command Details</h3>
+                <div class="code-container">
+                    <div class="code-header">
+                        <span class="code-label">The Command</span>
+                        <button class="copy-btn" onclick="copyCode(this, '${command}')">
+                            <span>📋</span> Copy
+                        </button>
+                    </div>
+                    <div class="code-block">${command}</div>
+                </div>
+                <p style="margin-top: 20px;">${description}</p>
+                <div class="forrest-note info-box" style="margin-top: 20px;">
+                    <h4>💡 Forrest, Remember</h4>
+                    <p>You can always use the up arrow to get back to commands you already typed. Work smarter, not harder!</p>
+                </div>
+            `;
+            document.getElementById('modalContent').innerHTML = modalContent;
+            document.getElementById('modal').style.display = 'block';
+        }
+
+        // Show path info
+        function showPath(path) {
+            copyCommand(`cd ${path}`);
+            showNotification(`Path copied! Just paste it 📁`);
+        }
+
+        // Show API command
+        function showAPICommand(cmd) {
+            copyCommand(cmd);
+            showNotification('API command copied! This is the fun stuff 🔥');
+        }
+
+        // Run command demo
+        function runCommand(cmd) {
+            showNotification(`Would run: ${cmd}`);
+        }
+
+        // Package demo
+        function runPackageDemo(action) {
+            const demos = {
+                'search': 'pkg search python',
+                'install': 'pkg install python',
+                'list': 'pkg list-installed',
+            };
+            
+            copyCommand(demos[action] || 'pkg help');
+            showNotification('Command copied! Paste that bad boy 🚀');
+        }
+
+        // Add CSS animation keyframes dynamically
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideUp {
+                from { transform: translate(-50%, 100px); opacity: 0; }
+                to { transform: translate(-50%, 0); opacity: 1; }
+            }
+            @keyframes slideDown {
+                from { transform: translate(-50%, 0); opacity: 1; }
+                to { transform: translate(-50%, 100px); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Initialize animations on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.section').forEach(section => {
+            section.style.opacity = '0';
+            section.style.transform = 'translateY(30px)';
+            section.style.transition = 'all 0.6s ease-out';
+            observer.observe(section);
+        });
+    </script>
 </body>
 </html>
