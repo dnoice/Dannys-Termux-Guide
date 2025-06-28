@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Forrest's Personal Termux Guide - Let's Get This Bread 🍞</title>
+    <title>Forrest's Termux Guide - Let's Do This Right</title>
     <style>
         * {
             margin: 0;
@@ -12,23 +12,29 @@
         }
 
         :root {
-            --primary: #00d4ff;
-            --secondary: #ff006e;
-            --accent: #00ff88;
-            --bg-dark: #0a0a0a;
-            --bg-card: #141414;
-            --bg-code: #1a1a1a;
-            --text-primary: #e0e0e0;
-            --text-secondary: #a0a0a0;
-            --border: #2a2a2a;
-            --success: #00ff88;
-            --warning: #ff9800;
-            --error: #ff006e;
-            --sidebar-width: 300px;
+            /* Clean, professional color scheme */
+            --primary: #3b82f6;      /* Nice blue */
+            --primary-dark: #2563eb; /* Darker blue */
+            --primary-light: #60a5fa; /* Lighter blue */
+            --accent: #10b981;       /* Success green */
+            --warning: #f59e0b;      /* Warning amber */
+            --danger: #ef4444;       /* Error red */
+            
+            --bg-dark: #0f172a;      /* Deep blue-black */
+            --bg-card: #1e293b;      /* Card background */
+            --bg-code: #0f172a;      /* Code block background */
+            --bg-hover: #334155;     /* Hover state */
+            
+            --text-primary: #f1f5f9;   /* Main text */
+            --text-secondary: #94a3b8; /* Secondary text */
+            --text-muted: #64748b;     /* Muted text */
+            
+            --border: #334155;       /* Border color */
+            --shadow: rgba(0, 0, 0, 0.5);
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             line-height: 1.6;
             color: var(--text-primary);
             background: var(--bg-dark);
@@ -36,247 +42,166 @@
             position: relative;
         }
 
-        /* Animated Background */
-        .bg-animation {
+        /* Subtle animated background */
+        body::before {
+            content: '';
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: -1;
-            opacity: 0.03;
             background: 
-                radial-gradient(circle at 20% 50%, var(--primary) 0%, transparent 50%),
-                radial-gradient(circle at 80% 80%, var(--secondary) 0%, transparent 50%),
-                radial-gradient(circle at 40% 20%, var(--accent) 0%, transparent 50%);
-            animation: bgMove 20s ease-in-out infinite;
-        }
-
-        @keyframes bgMove {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            33% { transform: translate(-20px, -20px) scale(1.1); }
-            66% { transform: translate(20px, -10px) scale(0.9); }
+                radial-gradient(circle at 20% 50%, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(16, 185, 129, 0.1) 0%, transparent 50%);
+            z-index: -1;
         }
 
         /* Header */
         header {
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #7e57c2 100%);
+            background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-dark) 100%);
             padding: 80px 20px;
             text-align: center;
             position: relative;
-            overflow: hidden;
-            animation: headerGradient 10s ease infinite;
-        }
-
-        @keyframes headerGradient {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-        }
-
-        header::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 200%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
-            animation: headerShine 3s infinite;
-        }
-
-        @keyframes headerShine {
-            0% { left: -100%; }
-            100% { left: 100%; }
+            border-bottom: 1px solid var(--border);
         }
 
         h1 {
             font-size: 3em;
             margin-bottom: 15px;
-            color: #fff;
-            text-shadow: 0 0 30px rgba(0, 212, 255, 0.5);
-            animation: glow 2s ease-in-out infinite alternate;
+            color: var(--text-primary);
+            font-weight: 700;
         }
 
-        @keyframes glow {
-            from { text-shadow: 0 0 30px rgba(0, 212, 255, 0.5); }
-            to { text-shadow: 0 0 40px rgba(0, 212, 255, 0.8), 0 0 50px rgba(0, 212, 255, 0.6); }
+        .subtitle {
+            font-size: 1.2em;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Layout */
+        .container {
+            display: flex;
+            max-width: 1400px;
+            margin: 0 auto;
+            gap: 30px;
+            padding: 30px 20px;
         }
 
         /* Sidebar */
         .sidebar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: var(--sidebar-width);
-            height: 100vh;
-            background: var(--bg-card);
-            border-right: 1px solid var(--border);
-            transform: translateX(-100%);
-            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            z-index: 1000;
-            overflow-y: auto;
-            padding: 20px;
-        }
-
-        .sidebar.active {
-            transform: translateX(0);
-        }
-
-        .sidebar-toggle {
-            position: fixed;
+            width: 300px;
+            position: sticky;
             top: 20px;
-            left: 20px;
-            z-index: 1001;
-            background: var(--primary);
-            border: none;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
+            height: fit-content;
+            background: var(--bg-card);
+            border-radius: 12px;
+            padding: 25px;
+            border: 1px solid var(--border);
+        }
+
+        .sidebar h3 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            font-size: 1.1em;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-item {
+            display: block;
+            padding: 12px 16px;
+            margin: 5px 0;
+            color: var(--text-secondary);
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.2s;
             cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s;
-            box-shadow: 0 4px 20px rgba(0, 212, 255, 0.3);
+            border: 1px solid transparent;
         }
 
-        .sidebar-toggle:hover {
-            transform: scale(1.1) rotate(180deg);
-            background: var(--accent);
+        .nav-item:hover {
+            background: var(--bg-hover);
+            color: var(--text-primary);
+            border-color: var(--primary);
+            transform: translateX(5px);
         }
 
-        .sidebar-toggle.active {
-            left: calc(var(--sidebar-width) + 20px);
+        .nav-item.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .nav-number {
+            color: var(--primary);
+            font-weight: 600;
+            margin-right: 8px;
         }
 
         /* Main Content */
         .main-content {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 20px;
-            transition: margin-left 0.3s;
-        }
-
-        .main-content.shifted {
-            margin-left: calc(var(--sidebar-width) / 2);
-        }
-
-        /* Progress Bar */
-        .progress-bar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: var(--bg-dark);
-            z-index: 999;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--primary), var(--accent));
-            width: 0%;
-            transition: width 0.3s;
-            animation: progressPulse 2s infinite;
-        }
-
-        @keyframes progressPulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.8; }
+            flex: 1;
+            min-width: 0;
         }
 
         /* Sections */
         .section {
             background: var(--bg-card);
-            border-radius: 16px;
+            border-radius: 12px;
             padding: 40px;
             margin-bottom: 30px;
             border: 1px solid var(--border);
-            position: relative;
-            overflow: hidden;
             transition: all 0.3s;
-            animation: sectionFadeIn 0.6s ease-out;
-        }
-
-        @keyframes sectionFadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
         }
 
         .section:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 40px rgba(0, 212, 255, 0.1);
             border-color: var(--primary);
-        }
-
-        .section::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 2px;
-            background: linear-gradient(90deg, var(--primary), var(--accent));
-            transform: scaleX(0);
-            transform-origin: left;
-            transition: transform 0.3s;
-        }
-
-        .section:hover::before {
-            transform: scaleX(1);
+            box-shadow: 0 4px 20px var(--shadow);
         }
 
         /* Typography */
         h2 {
-            color: var(--primary);
+            color: var(--text-primary);
             margin-bottom: 25px;
             font-size: 2em;
             display: flex;
             align-items: center;
             gap: 15px;
-        }
-
-        h2 .icon {
-            font-size: 1.2em;
-            animation: iconBounce 2s infinite;
-        }
-
-        @keyframes iconBounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-5px); }
+            font-weight: 600;
         }
 
         h3 {
-            color: var(--accent);
+            color: var(--primary);
             margin-top: 30px;
             margin-bottom: 15px;
-            font-size: 1.5em;
+            font-size: 1.4em;
+            font-weight: 600;
+        }
+
+        h4 {
+            color: var(--text-primary);
+            margin-bottom: 10px;
+            font-size: 1.1em;
+            font-weight: 600;
+        }
+
+        p {
+            margin-bottom: 15px;
+            line-height: 1.7;
         }
 
         /* Code Blocks */
         .code-container {
             position: relative;
             margin: 20px 0;
-            border-radius: 12px;
+            border-radius: 8px;
             overflow: hidden;
             background: var(--bg-code);
             border: 1px solid var(--border);
-            transition: all 0.3s;
-        }
-
-        .code-container:hover {
-            border-color: var(--primary);
-            box-shadow: 0 0 20px rgba(0, 212, 255, 0.1);
         }
 
         .code-header {
-            background: #0d0d0d;
+            background: var(--bg-hover);
             padding: 10px 20px;
             display: flex;
             justify-content: space-between;
@@ -293,39 +218,33 @@
         .copy-btn {
             background: var(--primary);
             border: none;
-            color: var(--bg-dark);
-            padding: 6px 12px;
+            color: white;
+            padding: 6px 16px;
             border-radius: 6px;
             cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 5px;
-            transition: all 0.3s;
+            gap: 8px;
+            transition: all 0.2s;
             font-size: 0.9em;
+            font-weight: 500;
         }
 
         .copy-btn:hover {
-            background: var(--accent);
-            transform: scale(1.05);
+            background: var(--primary-dark);
+            transform: translateY(-1px);
         }
 
         .copy-btn.copied {
-            background: var(--success);
-            animation: copySuccess 0.5s;
-        }
-
-        @keyframes copySuccess {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.2); }
-            100% { transform: scale(1); }
+            background: var(--accent);
         }
 
         .code-block {
             padding: 20px;
             font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
             overflow-x: auto;
-            position: relative;
             line-height: 1.5;
+            font-size: 0.95em;
         }
 
         .code-block::before {
@@ -336,50 +255,146 @@
 
         /* Info Boxes */
         .info-box {
-            padding: 25px;
+            padding: 20px;
             margin: 20px 0;
-            border-radius: 12px;
-            position: relative;
-            overflow: hidden;
-            animation: infoSlide 0.5s ease-out;
-        }
-
-        @keyframes infoSlide {
-            from {
-                opacity: 0;
-                transform: translateX(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        .why-box {
-            background: linear-gradient(135deg, #1e2a3a, #2a3a4a);
-            border-left: 4px solid var(--primary);
-        }
-
-        .tip {
-            background: linear-gradient(135deg, #1a3a1a, #2a4a2a);
-            border-left: 4px solid var(--success);
-        }
-
-        .warning {
-            background: linear-gradient(135deg, #3a1a1a, #4a2a2a);
-            border-left: 4px solid var(--error);
-        }
-
-        .forrest-note {
-            background: linear-gradient(135deg, #2a1a3a, #3a2a4a);
-            border-left: 4px solid #ff00ff;
+            border-radius: 8px;
+            border-left: 4px solid;
         }
 
         .info-box h4 {
-            margin-bottom: 10px;
             display: flex;
             align-items: center;
             gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .note-box {
+            background: rgba(59, 130, 246, 0.1);
+            border-color: var(--primary);
+        }
+
+        .tip-box {
+            background: rgba(16, 185, 129, 0.1);
+            border-color: var(--accent);
+        }
+
+        .warning-box {
+            background: rgba(245, 158, 11, 0.1);
+            border-color: var(--warning);
+        }
+
+        .danger-box {
+            background: rgba(239, 68, 68, 0.1);
+            border-color: var(--danger);
+        }
+
+        /* Interactive Elements */
+        .command-grid {
+            display: grid;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .command-card {
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .command-card::after {
+            content: '→';
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--primary);
+            opacity: 0;
+            transition: all 0.2s;
+        }
+
+        .command-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px var(--shadow);
+        }
+
+        .command-card:hover::after {
+            opacity: 1;
+            right: 15px;
+        }
+
+        .command-name {
+            font-family: monospace;
+            color: var(--primary);
+            font-weight: bold;
+            font-size: 1.1em;
+            margin-bottom: 5px;
+        }
+
+        .command-desc {
+            color: var(--text-secondary);
+            font-size: 0.95em;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.2s;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        .btn-secondary {
+            background: var(--bg-hover);
+            color: var(--text-primary);
+        }
+
+        .btn-secondary:hover {
+            background: var(--border);
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            overflow: hidden;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+
+        th {
+            background: var(--bg-hover);
+            color: var(--text-primary);
+            padding: 12px 16px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 12px 16px;
+            border-top: 1px solid var(--border);
+        }
+
+        tr:hover {
+            background: rgba(59, 130, 246, 0.05);
         }
 
         /* Modal System */
@@ -391,1168 +406,922 @@
             width: 100%;
             height: 100%;
             background: rgba(0, 0, 0, 0.8);
-            z-index: 2000;
-            animation: modalFade 0.3s;
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s;
         }
 
-        @keyframes modalFade {
-            from { opacity: 0; }
-            to { opacity: 1; }
+        .modal.show {
+            opacity: 1;
         }
 
         .modal-content {
             position: absolute;
             top: 50%;
             left: 50%;
-            transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%) scale(0.95);
             background: var(--bg-card);
             padding: 40px;
-            border-radius: 16px;
+            border-radius: 12px;
             max-width: 600px;
-            max-height: 80vh;
+            width: 90%;
+            max-height: 85vh;
             overflow-y: auto;
-            animation: modalSlide 0.3s;
-            border: 1px solid var(--primary);
-            box-shadow: 0 20px 60px rgba(0, 212, 255, 0.3);
+            border: 1px solid var(--border);
+            box-shadow: 0 20px 40px var(--shadow);
+            transition: transform 0.3s;
         }
 
-        @keyframes modalSlide {
-            from {
-                transform: translate(-50%, -50%) scale(0.8);
-                opacity: 0;
-            }
-            to {
-                transform: translate(-50%, -50%) scale(1);
-                opacity: 1;
-            }
+        .modal.show .modal-content {
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
         }
 
         .modal-close {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: var(--error);
+            background: var(--bg-hover);
             border: none;
-            color: white;
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
+            color: var(--text-primary);
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.3s;
+            transition: all 0.2s;
+            font-size: 20px;
         }
 
         .modal-close:hover {
-            transform: rotate(90deg) scale(1.1);
+            background: var(--danger);
+            color: white;
         }
 
-        /* Interactive Elements */
-        .interactive-demo {
-            background: var(--bg-code);
-            border-radius: 12px;
+        /* Progress Indicator */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--bg-dark);
+            z-index: 999;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--primary);
+            width: 0%;
+            transition: width 0.3s;
+        }
+
+        /* Mobile Menu Toggle */
+        .mobile-menu-toggle {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--primary);
+            color: white;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 12px var(--shadow);
+            z-index: 900;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Terminal Demo */
+        .terminal-demo {
+            background: #000;
+            border-radius: 8px;
             padding: 20px;
             margin: 20px 0;
+            font-family: monospace;
             border: 1px solid var(--border);
         }
 
-        .terminal-sim {
-            background: #000;
-            padding: 20px;
-            border-radius: 8px;
-            font-family: monospace;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .terminal-input {
-            background: transparent;
-            border: none;
-            color: var(--accent);
-            font-family: monospace;
-            font-size: 1em;
-            width: 100%;
-            outline: none;
-        }
-
-        .terminal-output {
-            color: var(--text-primary);
-            margin-top: 10px;
-            white-space: pre-wrap;
-        }
-
-        /* Buttons */
-        .btn {
-            display: inline-block;
-            background: linear-gradient(135deg, var(--primary), var(--accent));
-            color: var(--bg-dark);
-            padding: 12px 24px;
-            border-radius: 8px;
-            text-decoration: none;
-            transition: all 0.3s;
-            border: none;
-            cursor: pointer;
-            font-weight: 600;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .btn::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            background: rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-            transition: width 0.6s, height 0.6s;
-        }
-
-        .btn:hover::before {
-            width: 300px;
-            height: 300px;
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.3);
-        }
-
-        /* Command Explorer */
-        .command-explorer {
-            background: var(--bg-code);
-            border-radius: 12px;
-            padding: 20px;
-            margin: 20px 0;
-        }
-
-        .command-item {
-            display: flex;
-            align-items: center;
-            padding: 15px;
-            margin: 10px 0;
-            background: var(--bg-dark);
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s;
-            border: 1px solid transparent;
-        }
-
-        .command-item:hover {
-            border-color: var(--primary);
-            transform: translateX(5px);
-            background: #1a1a1a;
-        }
-
-        .command-name {
-            font-family: monospace;
-            color: var(--primary);
-            font-weight: bold;
-            margin-right: 15px;
-        }
-
-        .command-desc {
-            color: var(--text-secondary);
-            flex: 1;
-        }
-
-        /* Floating Action Button */
-        .fab {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            background: var(--secondary);
-            color: white;
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            box-shadow: 0 4px 20px rgba(255, 0, 110, 0.4);
-            transition: all 0.3s;
-            z-index: 900;
-        }
-
-        .fab:hover {
-            transform: scale(1.1) rotate(360deg);
-            background: var(--primary);
+        .terminal-line {
+            color: #0f0;
+            margin: 5px 0;
         }
 
         /* Responsive */
-        @media (max-width: 768px) {
+        @media (max-width: 1024px) {
+            .container {
+                flex-direction: column;
+            }
+            
             .sidebar {
-                width: 250px;
+                width: 100%;
+                position: relative;
+                top: 0;
             }
             
-            .main-content.shifted {
-                margin-left: 0;
+            .mobile-menu-toggle {
+                display: flex;
             }
-            
+        }
+
+        @media (max-width: 768px) {
             h1 {
                 font-size: 2em;
             }
             
             .section {
-                padding: 20px;
+                padding: 25px;
+            }
+            
+            .command-grid {
+                grid-template-columns: 1fr;
             }
         }
 
-        /* Loading Animation */
-        .loader {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            display: none;
-        }
-
-        .loader-circle {
-            width: 60px;
-            height: 60px;
-            border: 3px solid var(--bg-card);
-            border-top-color: var(--primary);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        .forrest-special {
-            background: linear-gradient(45deg, #ff00ff, #00ffff);
+        /* Special styles */
+        .forrest-highlight {
+            background: linear-gradient(to right, var(--primary), var(--accent));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             font-weight: bold;
         }
+
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-dark);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--bg-hover);
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary);
+        }
     </style>
 </head>
 <body>
-    <div class="bg-animation"></div>
-    
     <!-- Progress Bar -->
     <div class="progress-bar">
         <div class="progress-fill" id="progressBar"></div>
     </div>
 
-    <!-- Sidebar Toggle -->
-    <button class="sidebar-toggle" id="sidebarToggle">
-        <span style="font-size: 24px;">☰</span>
-    </button>
-
-    <!-- Sidebar -->
-    <aside class="sidebar" id="sidebar">
-        <h3 style="color: var(--primary); margin-bottom: 20px;">🍺 Quick Nav, Buddy</h3>
-        <nav>
-            <div class="command-explorer">
-                <div class="command-item" onclick="scrollToSection('intro')">
-                    <span class="command-name">01.</span>
-                    <span class="command-desc">WTF is Termux?</span>
-                </div>
-                <div class="command-item" onclick="scrollToSection('install')">
-                    <span class="command-name">02.</span>
-                    <span class="command-desc">Getting This Bad Boy</span>
-                </div>
-                <div class="command-item" onclick="scrollToSection('first-launch')">
-                    <span class="command-name">03.</span>
-                    <span class="command-desc">First Time Setup</span>
-                </div>
-                <div class="command-item" onclick="scrollToSection('basics')">
-                    <span class="command-name">04.</span>
-                    <span class="command-desc">Terminal 101</span>
-                </div>
-                <div class="command-item" onclick="scrollToSection('commands')">
-                    <span class="command-name">05.</span>
-                    <span class="command-desc">Commands That Matter</span>
-                </div>
-                <div class="command-item" onclick="scrollToSection('packages')">
-                    <span class="command-name">06.</span>
-                    <span class="command-desc">Installing Cool Shit</span>
-                </div>
-                <div class="command-item" onclick="scrollToSection('examples')">
-                    <span class="command-name">07.</span>
-                    <span class="command-desc">Actually Doing Stuff</span>
-                </div>
-                <div class="command-item" onclick="scrollToSection('storage')">
-                    <span class="command-name">08.</span>
-                    <span class="command-desc">Phone Storage Access</span>
-                </div>
-                <div class="command-item" onclick="scrollToSection('advanced')">
-                    <span class="command-name">09.</span>
-                    <span class="command-desc">Next Level Shit</span>
-                </div>
-            </div>
-        </nav>
-        
-        <h3 style="color: var(--accent); margin-top: 30px; margin-bottom: 15px;">⚡ Quick Commands</h3>
-        <div style="background: var(--bg-dark); padding: 15px; border-radius: 8px;">
-            <p style="font-family: monospace; margin: 5px 0; cursor: pointer;" onclick="copyCommand('pkg update')">pkg update</p>
-            <p style="font-family: monospace; margin: 5px 0; cursor: pointer;" onclick="copyCommand('pkg install python')">pkg install python</p>
-            <p style="font-family: monospace; margin: 5px 0; cursor: pointer;" onclick="copyCommand('termux-setup-storage')">termux-setup-storage</p>
-        </div>
-    </aside>
-
     <!-- Header -->
     <header>
-        <h1>🚀 Yo Forrest! Let's Master Termux</h1>
-        <p class="subtitle">Your Personal Guide to Turning Your Phone Into a Hacker Machine</p>
+        <h1>Hey Forrest! Let's Master Termux</h1>
+        <p class="subtitle">Your personal guide to turning your Android into a Linux powerhouse – no BS, just the good stuff</p>
     </header>
 
-    <!-- Main Content -->
-    <main class="main-content" id="mainContent">
-        <!-- Introduction Section -->
-        <section class="section" id="intro">
-            <h2><span class="icon">🍺</span> Alright Forrest, Let's Talk Termux</h2>
-            <p>So you want to run Linux on your phone? Hell yeah, brother. Termux is basically like having a full Linux computer in your pocket, except it's on your Android and you don't need to root anything. Pretty sick, right?</p>
-            
-            <div class="forrest-note info-box">
-                <h4>🎯 Real Talk - Why You'll Love This</h4>
-                <p>Look man, I know terminal stuff can seem intimidating at first, but trust me on this one. Once you get the hang of it, you'll be:</p>
-                <ul>
-                    <li>Running Python scripts while taking a dump</li>
-                    <li>SSHing into servers from the bar</li>
-                    <li>Automating boring phone tasks</li>
-                    <li>Looking like a absolute wizard to everyone else</li>
-                </ul>
-            </div>
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar" id="sidebar">
+            <h3>Navigation</h3>
+            <nav>
+                <a href="#intro" class="nav-item">
+                    <span class="nav-number">01.</span> What is Termux?
+                </a>
+                <a href="#install" class="nav-item">
+                    <span class="nav-number">02.</span> Installation
+                </a>
+                <a href="#first-launch" class="nav-item">
+                    <span class="nav-number">03.</span> First Launch
+                </a>
+                <a href="#basics" class="nav-item">
+                    <span class="nav-number">04.</span> Terminal Basics
+                </a>
+                <a href="#commands" class="nav-item">
+                    <span class="nav-number">05.</span> Essential Commands
+                </a>
+                <a href="#packages" class="nav-item">
+                    <span class="nav-number">06.</span> Package Management
+                </a>
+                <a href="#projects" class="nav-item">
+                    <span class="nav-number">07.</span> Real Projects
+                </a>
+                <a href="#storage" class="nav-item">
+                    <span class="nav-number">08.</span> Storage Access
+                </a>
+                <a href="#advanced" class="nav-item">
+                    <span class="nav-number">09.</span> Advanced Topics
+                </a>
+                <a href="#troubleshooting" class="nav-item">
+                    <span class="nav-number">10.</span> Troubleshooting
+                </a>
+            </nav>
 
-            <div class="interactive-demo">
-                <h4>🎮 Here's What It Looks Like</h4>
-                <div class="terminal-sim">
-                    <div style="color: #4a9eff;">$ <span id="typewriter"></span><span class="cursor">_</span></div>
-                    <div class="terminal-output" id="demoOutput"></div>
+            <h3 style="margin-top: 30px;">Quick Commands</h3>
+            <div style="background: var(--bg-dark); padding: 15px; border-radius: 8px;">
+                <div style="font-family: monospace; margin: 8px 0; cursor: pointer; color: var(--primary);" onclick="copyQuickCommand('pkg update && pkg upgrade')">pkg update</div>
+                <div style="font-family: monospace; margin: 8px 0; cursor: pointer; color: var(--primary);" onclick="copyQuickCommand('pkg install python')">pkg install python</div>
+                <div style="font-family: monospace; margin: 8px 0; cursor: pointer; color: var(--primary);" onclick="copyQuickCommand('termux-setup-storage')">termux-setup-storage</div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Introduction -->
+            <section class="section" id="intro">
+                <h2>📱 What is Termux?</h2>
+                <p>Alright Forrest, let me break this down for you. Termux is basically Linux on your Android phone. No root needed, no complicated setup – just install and you've got a full Linux terminal in your pocket.</p>
+
+                <div class="info-box note-box">
+                    <h4>💡 Why You'll Love This</h4>
+                    <p>Look, I know terminal stuff might seem intimidating, but here's what you'll be able to do:</p>
+                    <ul>
+                        <li>Run Python scripts anywhere</li>
+                        <li>SSH into servers from your phone</li>
+                        <li>Automate boring tasks</li>
+                        <li>Build and test code on the go</li>
+                        <li>Look like a wizard to everyone else</li>
+                    </ul>
                 </div>
-            </div>
 
-            <div class="why-box info-box">
-                <h4>💡 The Bottom Line</h4>
-                <p>Termux turns your phone into a portable Linux box. No bullshit, no root required, just pure command-line power. You can code, hack, automate, and do all sorts of nerdy shit right from your phone.</p>
-            </div>
-        </section>
-
-        <!-- Installation Section -->
-        <section class="section" id="install">
-            <h2><span class="icon">📥</span> Getting Termux (The Right Way)</h2>
-            
-            <div class="warning info-box">
-                <h4>⚠️ FORREST, THIS IS IMPORTANT</h4>
-                <p>DO NOT get Termux from the Play Store. That version is old as fuck and broken. We're going to do this properly.</p>
-            </div>
-
-            <h3>🌟 The Easy Way - F-Droid</h3>
-            <p>F-Droid is like the Play Store but for open-source apps. It's legit and keeps everything updated.</p>
-            
-            <div class="command-explorer">
-                <div class="command-item" onclick="openModal('fdroid-details')">
-                    <span class="command-name">Step 1</span>
-                    <span class="command-desc">Get F-Droid first</span>
+                <div class="terminal-demo">
+                    <div class="terminal-line">$ python server.py</div>
+                    <div class="terminal-line">Server running on http://localhost:8080</div>
+                    <div class="terminal-line">$ echo "Running Linux on my phone!"</div>
+                    <div class="terminal-line">Running Linux on my phone!</div>
                 </div>
-                <div class="command-item" onclick="openModal('fdroid-install')">
-                    <span class="command-name">Step 2</span>
-                    <span class="command-desc">Install Termux from F-Droid</span>
-                </div>
-                <div class="command-item" onclick="openModal('fdroid-addons')">
-                    <span class="command-name">Step 3</span>
-                    <span class="command-desc">Grab the add-ons (optional but cool)</span>
-                </div>
-            </div>
+            </section>
 
-            <h3>🔧 The Manual Way (If You're Feeling Adventurous)</h3>
-            <p>You can also grab it straight from GitHub if you want:</p>
-            <a href="https://github.com/termux/termux-app/releases" class="btn" target="_blank">
-                GitHub Releases
-            </a>
-
-            <div class="tip info-box">
-                <h4>💡 Pro Tip from Your Boy</h4>
-                <p>Just use F-Droid, man. It's easier and you won't have to manually update shit. Plus, all the add-ons work together nicely.</p>
-            </div>
-        </section>
-
-        <!-- First Launch Section -->
-        <section class="section" id="first-launch">
-            <h2><span class="icon">🚀</span> First Time Opening This Bad Boy</h2>
-            
-            <h3>What You're Gonna See</h3>
-            <p>When you fire up Termux for the first time, you'll see some text that looks like this:</p>
-            
-            <div class="code-container">
-                <div class="code-header">
-                    <span class="code-label">Welcome Screen</span>
-                    <button class="copy-btn" onclick="copyCode(this, 'Welcome to Termux!')">
-                        <span>📋</span> Copy
-                    </button>
+            <!-- Installation -->
+            <section class="section" id="install">
+                <h2>📥 Installation Guide</h2>
+                
+                <div class="info-box danger-box">
+                    <h4>⚠️ Important Warning</h4>
+                    <p>DO NOT install from Google Play Store. That version is outdated and broken. We need to do this right.</p>
                 </div>
-                <div class="code-block" style="color: #00ff88;">Welcome to Termux!
+
+                <h3>Option 1: F-Droid (Recommended)</h3>
+                <p>F-Droid is an open-source app store. It's the best way to get Termux and keep it updated.</p>
+
+                <div class="command-grid">
+                    <div class="command-card" onclick="showModal('fdroid-step1')">
+                        <div class="command-name">Step 1: Get F-Droid</div>
+                        <div class="command-desc">Download and install the F-Droid app store</div>
+                    </div>
+                    <div class="command-card" onclick="showModal('fdroid-step2')">
+                        <div class="command-name">Step 2: Install Termux</div>
+                        <div class="command-desc">Search for Termux in F-Droid and install it</div>
+                    </div>
+                    <div class="command-card" onclick="showModal('fdroid-step3')">
+                        <div class="command-name">Step 3: Get Add-ons</div>
+                        <div class="command-desc">Optional add-ons for extra functionality</div>
+                    </div>
+                </div>
+
+                <h3>Option 2: GitHub Releases</h3>
+                <p>If you prefer downloading directly:</p>
+                <a href="https://github.com/termux/termux-app/releases" target="_blank" class="btn">Download from GitHub</a>
+
+                <div class="info-box tip-box" style="margin-top: 20px;">
+                    <h4>💡 Pro Tip</h4>
+                    <p>Stick with F-Droid. It handles updates automatically and ensures all Termux components work together properly.</p>
+                </div>
+            </section>
+
+            <!-- First Launch -->
+            <section class="section" id="first-launch">
+                <h2>🚀 First Launch Setup</h2>
+                
+                <h3>What You'll See</h3>
+                <p>When you open Termux for the first time, you'll see something like this:</p>
+
+                <div class="code-container">
+                    <div class="code-header">
+                        <span class="code-label">Termux Welcome Screen</span>
+                    </div>
+                    <div class="code-block" style="color: var(--accent);">Welcome to Termux!
 
 Wiki:            https://wiki.termux.com
 Community:       https://termux.com/community
-Packages:        https://packages.termux.org/
 
 Working with packages:
- * Search:    pkg search &lt;query&gt;
- * Install:   pkg install &lt;package&gt;
- * Upgrade:   pkg upgrade
+ * Search packages:   pkg search &lt;query&gt;
+ * Install a package: pkg install &lt;package&gt;
+ * Upgrade packages:  pkg upgrade
 
 $</div>
-            </div>
-
-            <div class="forrest-note info-box">
-                <h4>🤔 Don't Panic!</h4>
-                <p>I know it looks like some Matrix shit, but that dollar sign ($) just means "hey, I'm ready for your commands". Think of it like the terminal is saying "What's up? What do you need?"</p>
-            </div>
-
-            <h3>🎯 First Thing We Gotta Do</h3>
-            <p>Before we do anything fun, we need to update this thing. It's like updating your apps, but cooler:</p>
-
-            <div class="code-container">
-                <div class="code-header">
-                    <span class="code-label">The Magic Update Command</span>
-                    <button class="copy-btn" onclick="copyCode(this, 'pkg update && pkg upgrade')">
-                        <span>📋</span> Copy This!
-                    </button>
                 </div>
-                <div class="code-block">pkg update && pkg upgrade</div>
-            </div>
 
-            <div class="why-box info-box">
-                <h4>💡 What The Hell Does That Mean?</h4>
-                <div style="background: rgba(0,0,0,0.3); padding: 15px; border-radius: 8px; margin-top: 10px;">
-                    <p><code style="color: var(--primary);">pkg</code> → Package manager (think of it as Termux's app store)</p>
-                    <p><code style="color: var(--primary);">update</code> → Check what's new</p>
-                    <p><code style="color: var(--primary);">&&</code> → "AND THEN" (do the next thing if the first thing worked)</p>
-                    <p><code style="color: var(--primary);">upgrade</code> → Actually install the updates</p>
+                <div class="info-box note-box">
+                    <h4>📝 Quick Explanation</h4>
+                    <p>That dollar sign ($) is the prompt – it means Termux is ready for your commands. Think of it as the terminal saying "What's next?"</p>
                 </div>
-                <p style="margin-top: 10px;">When it asks you "Do you want to continue? [Y/n]" just hit Y and Enter. Easy money.</p>
-            </div>
 
-            <h3>🎨 Making It Look Less Boring</h3>
-            <p>Want to change how it looks? We got options:</p>
-            
-            <div class="command-explorer">
-                <div class="command-item" onclick="showCommand('termux-style')">
-                    <span class="command-name">Change Colors</span>
-                    <span class="command-desc">Make it look cool</span>
-                </div>
-                <div class="command-item" onclick="showCommand('extra-keys')">
-                    <span class="command-name">Extra Keys</span>
-                    <span class="command-desc">Get those special buttons</span>
-                </div>
-            </div>
-        </section>
+                <h3>Essential First Command</h3>
+                <p>Before we do anything else, let's update everything:</p>
 
-        <!-- Terminal Basics Section -->
-        <section class="section" id="basics">
-            <h2><span class="icon">🖥️</span> Terminal Basics (Don't Worry, It's Easy)</h2>
-            
-            <h3>Think of It Like Texting Your Phone</h3>
-            <p>Seriously, Forrest. The terminal is just you having a text conversation with your phone. You type something, hit Enter, and it does the thing or tells you something back.</p>
-
-            <div class="forrest-note info-box">
-                <h4>🎮 The Controls You Actually Need</h4>
-                <p>Here's the shit you'll use all the time:</p>
-            </div>
-
-            <div class="interactive-demo">
-                <table style="width: 100%; background: var(--bg-code); border-radius: 8px;">
-                    <tr>
-                        <th style="padding: 15px; border-bottom: 1px solid var(--border);">What You Want</th>
-                        <th style="padding: 15px; border-bottom: 1px solid var(--border);">How to Do It</th>
-                        <th style="padding: 15px; border-bottom: 1px solid var(--border);">Why You'd Use It</th>
-                    </tr>
-                    <tr>
-                        <td style="padding: 15px;">Clear all the text</td>
-                        <td style="padding: 15px; font-family: monospace; color: var(--primary);">clear or Ctrl+L</td>
-                        <td style="padding: 15px;">When shit gets messy</td>
-                    </tr>
-                    <tr>
-                        <td style="padding: 15px;">Stop something running</td>
-                        <td style="padding: 15px; font-family: monospace; color: var(--primary);">Ctrl+C</td>
-                        <td style="padding: 15px;">When you fucked up</td>
-                    </tr>
-                    <tr>
-                        <td style="padding: 15px;">Previous command</td>
-                        <td style="padding: 15px; font-family: monospace; color: var(--primary);">↑ arrow</td>
-                        <td style="padding: 15px;">Lazy typing FTW</td>
-                    </tr>
-                    <tr>
-                        <td style="padding: 15px;">Exit Termux</td>
-                        <td style="padding: 15px; font-family: monospace; color: var(--primary);">exit</td>
-                        <td style="padding: 15px;">Peace out</td>
-                    </tr>
-                </table>
-            </div>
-
-            <div class="tip info-box">
-                <h4>🎯 Termux Keyboard Hack</h4>
-                <p>Yo, check this out - you can swipe from the left edge to get extra keys, or use:</p>
-                <ul>
-                    <li>Volume Up + Q = Ctrl+C (stop shit)</li>
-                    <li>Volume Up + W = Up arrow (previous command)</li>
-                    <li>Volume Down + A = Left arrow</li>
-                </ul>
-                <p>Or just get Hacker's Keyboard from F-Droid. It's dope.</p>
-            </div>
-        </section>
-
-        <!-- Essential Commands Section -->
-        <section class="section" id="commands">
-            <h2><span class="icon">📝</span> Commands You Actually Need to Know</h2>
-            
-            <h3>🗺️ Navigation (Moving Around)</h3>
-            
-            <!-- pwd command -->
-            <div style="margin-bottom: 30px;">
-                <h4 style="color: var(--primary); margin-bottom: 15px;">Where The Hell Am I? - pwd</h4>
                 <div class="code-container">
                     <div class="code-header">
-                        <span class="code-label">Show Current Location</span>
-                        <button class="copy-btn" onclick="copyCode(this, 'pwd')">
-                            <span>📋</span> Copy
+                        <span class="code-label">Update Termux</span>
+                        <button class="copy-btn" onclick="copyCode(this, 'pkg update && pkg upgrade')">
+                            📋 Copy
                         </button>
                     </div>
-                    <div class="code-block">pwd</div>
+                    <div class="code-block">pkg update && pkg upgrade</div>
                 </div>
-                <div class="forrest-note info-box">
-                    <h4>💡 What's This Do?</h4>
-                    <p><strong>pwd</strong> = "Print Working Directory" (fancy way of saying "where am I?")</p>
-                    <p>It'll show something like: <code>/data/data/com.termux/files/home</code></p>
-                    <p>That's your home folder in Termux. Think of it as your personal space.</p>
-                </div>
-            </div>
 
-            <!-- ls command -->
-            <div style="margin-bottom: 30px;">
-                <h4 style="color: var(--primary); margin-bottom: 15px;">What's In Here? - ls</h4>
-                <div class="code-container">
-                    <div class="code-header">
-                        <span class="code-label">List All The Shit</span>
-                        <button class="copy-btn" onclick="copyCode(this, 'ls -la')">
-                            <span>📋</span> Copy
-                        </button>
-                    </div>
-                    <div class="code-block">ls -la</div>
+                <div class="info-box note-box">
+                    <h4>💡 What This Does</h4>
+                    <ul>
+                        <li><code>pkg update</code> – Refreshes the list of available packages</li>
+                        <li><code>&&</code> – Means "and then" (run the next command if successful)</li>
+                        <li><code>pkg upgrade</code> – Installs any available updates</li>
+                    </ul>
+                    <p>When it asks "Do you want to continue? [Y/n]", just type Y and hit Enter.</p>
                 </div>
-                <div class="why-box info-box">
-                    <h4>💡 The Options Breakdown</h4>
-                    <div style="display: grid; grid-template-columns: 100px 1fr; gap: 10px; margin-top: 10px;">
-                        <code style="color: var(--accent);">ls</code>
-                        <span>Show me what's here</span>
-                        <code style="color: var(--accent);">-l</code>
-                        <span>Long format (more details)</span>
-                        <code style="color: var(--accent);">-a</code>
-                        <span>ALL files (even hidden ones)</span>
-                    </div>
-                    <p style="margin-top: 15px;">Pro tip: If nothing shows up, that's normal for a fresh install. Your folder is just empty, bro.</p>
-                </div>
-            </div>
 
-            <!-- cd command -->
-            <div style="margin-bottom: 30px;">
-                <h4 style="color: var(--primary); margin-bottom: 15px;">Moving Around - cd</h4>
-                <p>This is how you navigate. Think of it like clicking folders, but with text:</p>
-                <div class="command-explorer">
-                    <div class="command-item" onclick="showCommandModal('cd ~', 'Goes back to your home folder from anywhere')">
-                        <span class="command-name">cd ~</span>
-                        <span class="command-desc">Go home</span>
+                <h3>Customization Options</h3>
+                <div class="command-grid">
+                    <div class="command-card" onclick="showModal('customize-colors')">
+                        <div class="command-name">termux-style</div>
+                        <div class="command-desc">Change colors and fonts</div>
                     </div>
-                    <div class="command-item" onclick="showCommandModal('cd ..', 'Goes back one folder (like hitting the back button)')">
-                        <span class="command-name">cd ..</span>
-                        <span class="command-desc">Go back</span>
-                    </div>
-                    <div class="command-item" onclick="showCommandModal('cd foldername', 'Enter a specific folder')">
-                        <span class="command-name">cd projects</span>
-                        <span class="command-desc">Enter folder</span>
+                    <div class="command-card" onclick="showModal('extra-keys')">
+                        <div class="command-name">Extra Keys</div>
+                        <div class="command-desc">Enable special keyboard row</div>
                     </div>
                 </div>
-            </div>
+            </section>
 
-            <h3>📁 File Stuff</h3>
-            
-            <div class="forrest-note info-box">
-                <h4>🎯 The Commands That Matter</h4>
-                <p>Here's what you'll actually use, Forrest:</p>
-            </div>
-
-            <div class="interactive-demo">
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-                    <div class="code-container">
-                        <div class="code-header">
-                            <span class="code-label">Make a File</span>
-                            <button class="copy-btn" onclick="copyCode(this, 'touch filename.txt')">
-                                <span>📋</span> Copy
-                            </button>
-                        </div>
-                        <div class="code-block">touch filename.txt</div>
-                    </div>
-                    <div class="code-container">
-                        <div class="code-header">
-                            <span class="code-label">Make a Folder</span>
-                            <button class="copy-btn" onclick="copyCode(this, 'mkdir foldername')">
-                                <span>📋</span> Copy
-                            </button>
-                        </div>
-                        <div class="code-block">mkdir foldername</div>
-                    </div>
-                    <div class="code-container">
-                        <div class="code-header">
-                            <span class="code-label">Copy Shit</span>
-                            <button class="copy-btn" onclick="copyCode(this, 'cp source.txt dest.txt')">
-                                <span>📋</span> Copy
-                            </button>
-                        </div>
-                        <div class="code-block">cp source.txt dest.txt</div>
-                    </div>
-                    <div class="code-container">
-                        <div class="code-header">
-                            <span class="code-label">Move/Rename</span>
-                            <button class="copy-btn" onclick="copyCode(this, 'mv oldname.txt newname.txt')">
-                                <span>📋</span> Copy
-                            </button>
-                        </div>
-                        <div class="code-block">mv oldname.txt newname.txt</div>
-                    </div>
-                </div>
-            </div>
-
-            <h3>✏️ Editing Files (The Easy Way)</h3>
-            <div class="tip info-box">
-                <h4>🎯 Using Nano (It's Not Scary)</h4>
-                <p>Nano is the easiest text editor. Here's the cheat sheet:</p>
-                <div class="code-container">
-                    <div class="code-header">
-                        <span class="code-label">Open a File</span>
-                        <button class="copy-btn" onclick="copyCode(this, 'nano myfile.txt')">
-                            <span>📋</span> Copy
-                        </button>
-                    </div>
-                    <div class="code-block">nano myfile.txt</div>
-                </div>
-                <ul style="margin-top: 15px;">
-                    <li><code>Ctrl+O</code> → Save (then hit Enter)</li>
-                    <li><code>Ctrl+X</code> → Exit</li>
-                    <li><code>Ctrl+K</code> → Cut line</li>
-                    <li><code>Ctrl+U</code> → Paste</li>
-                </ul>
-                <p style="margin-top: 15px;">That's it. Seriously. Don't overthink it.</p>
-            </div>
-        </section>
-
-        <!-- Package Management Section -->
-        <section class="section" id="packages">
-            <h2><span class="icon">📦</span> Installing Cool Shit</h2>
-            
-            <h3>The Package Manager (Your New Best Friend)</h3>
-            <p>Alright Forrest, <code>pkg</code> is basically like the app store for Termux. Want Python? Git? Node.js? This is how you get 'em.</p>
-
-            <div class="command-explorer">
-                <h4>Essential Package Commands</h4>
-                <div class="command-item" onclick="runPackageDemo('search')">
-                    <span class="command-name">pkg search</span>
-                    <span class="command-desc">Find stuff to install</span>
-                </div>
-                <div class="command-item" onclick="runPackageDemo('install')">
-                    <span class="command-name">pkg install</span>
-                    <span class="command-desc">Actually install it</span>
-                </div>
-                <div class="command-item" onclick="runPackageDemo('list')">
-                    <span class="command-name">pkg list-installed</span>
-                    <span class="command-desc">See what you got</span>
-                </div>
-            </div>
-
-            <h3>🚀 The Starter Pack</h3>
-            <p>Here's what I recommend you install right off the bat:</p>
-            
-            <div class="code-container">
-                <div class="code-header">
-                    <span class="code-label">Copy This Whole Thing</span>
-                    <button class="copy-btn" onclick="copyCode(this, 'pkg install git wget curl nano python nodejs')">
-                        <span>📋</span> Get Em All!
-                    </button>
-                </div>
-                <div class="code-block">pkg install git wget curl nano python nodejs</div>
-            </div>
-
-            <div class="why-box info-box">
-                <h4>💡 What You're Getting</h4>
-                <div style="display: grid; grid-template-columns: 120px 1fr; gap: 15px; margin-top: 15px;">
-                    <code style="color: var(--accent);">git</code>
-                    <span>For cloning repos and version control</span>
-                    <code style="color: var(--accent);">wget/curl</code>
-                    <span>Download files from the internet</span>
-                    <code style="color: var(--accent);">nano</code>
-                    <span>Easy text editor (trust me on this)</span>
-                    <code style="color: var(--accent);">python</code>
-                    <span>For all your Python scripts</span>
-                    <code style="color: var(--accent);">nodejs</code>
-                    <span>JavaScript on the server side</span>
-                </div>
-            </div>
-
-            <div class="forrest-note info-box">
-                <h4>🍺 Real Talk</h4>
-                <p>When it asks "Do you want to continue?" just hit Y. It's gonna download a bunch of shit. Grab a beer, it'll take a minute.</p>
-            </div>
-        </section>
-
-        <!-- Practical Examples Section -->
-        <section class="section" id="examples">
-            <h2><span class="icon">🛠️</span> Actually Doing Cool Shit</h2>
-            
-            <h3>🐍 Example 1: Your First Python Script</h3>
-            <p>Let's make something that actually does something:</p>
-            
-            <div class="interactive-demo">
-                <ol>
-                    <li>Create a Python file:
-                        <div class="code-container">
-                            <div class="code-header">
-                                <span class="code-label">Make the File</span>
-                                <button class="copy-btn" onclick="copyCode(this, 'nano forrest_script.py')">
-                                    <span>📋</span> Copy
-                                </button>
-                            </div>
-                            <div class="code-block">nano forrest_script.py</div>
-                        </div>
-                    </li>
-                    <li>Type this shit in (or copy it):
-                        <div class="code-container">
-                            <div class="code-header">
-                                <span class="code-label">The Code</span>
-                                <button class="copy-btn" onclick="copyCode(this, `import random
-
-print('Yo Forrest! Welcome to Termux Python!')
-print('Let me generate your lucky number...')
-
-lucky = random.randint(1, 100)
-print(f'Your lucky number is: {lucky}')
-
-if lucky > 50:
-    print('Damn, that\\'s a big one!')
-else:
-    print('Small number, big dreams!')`)">
-                                    <span>📋</span> Copy
-                                </button>
-                            </div>
-                            <div class="code-block" style="color: #e0e0e0;">import random
-
-print('Yo Forrest! Welcome to Termux Python!')
-print('Let me generate your lucky number...')
-
-lucky = random.randint(1, 100)
-print(f'Your lucky number is: {lucky}')
-
-if lucky > 50:
-    print('Damn, that\'s a big one!')
-else:
-    print('Small number, big dreams!')</div>
-                        </div>
-                    </li>
-                    <li>Save and exit: <code>Ctrl+O</code>, Enter, <code>Ctrl+X</code></li>
-                    <li>Run that bad boy:
-                        <div class="code-container">
-                            <div class="code-header">
-                                <span class="code-label">Execute!</span>
-                                <button class="copy-btn" onclick="copyCode(this, 'python forrest_script.py')">
-                                    <span>📋</span> Copy
-                                </button>
-                            </div>
-                            <div class="code-block">python forrest_script.py</div>
-                        </div>
-                    </li>
-                </ol>
-            </div>
-
-            <div class="forrest-note info-box">
-                <h4>🎉 Boom!</h4>
-                <p>You just ran Python on your fucking phone. How cool is that?</p>
-            </div>
-
-            <h3>🌐 Example 2: Quick Web Server</h3>
-            <p>Want to share files with your computer? Check this out:</p>
-            
-            <div class="code-container">
-                <div class="code-header">
-                    <span class="code-label">One Line Web Server</span>
-                    <button class="copy-btn" onclick="copyCode(this, 'python -m http.server 8080')">
-                        <span>📋</span> Copy
-                    </button>
-                </div>
-                <div class="code-block">python -m http.server 8080</div>
-            </div>
-            
-            <div class="tip info-box">
-                <h4>💡 How to Use This</h4>
-                <ol>
-                    <li>Run that command in a folder with files</li>
-                    <li>Find your phone's IP: <code>ip addr | grep wlan0</code></li>
-                    <li>On your computer, go to: <code>http://[phone-ip]:8080</code></li>
-                    <li>Boom! Access your phone files from your computer</li>
-                    <li>Hit <code>Ctrl+C</code> to stop it</li>
-                </ol>
-            </div>
-
-            <h3>🤖 Example 3: Lazy Man's Backup</h3>
-            <p>Let's make a script that backs up your important shit:</p>
-            
-            <div class="code-container">
-                <div class="code-header">
-                    <span class="code-label">backup.sh</span>
-                    <button class="copy-btn" onclick="copyCode(this, `#!/bin/bash
-# Forrest's Backup Script
-
-echo "🔥 Starting Forrest's backup..."
-DATE=$(date +%Y%m%d_%H%M%S)
-BACKUP_DIR=~/backups/$DATE
-
-mkdir -p $BACKUP_DIR
-echo "📁 Created backup folder: $BACKUP_DIR"
-
-# Copy your important stuff here
-cp -r ~/projects $BACKUP_DIR/ 2>/dev/null
-cp -r ~/scripts $BACKUP_DIR/ 2>/dev/null
-
-echo "✅ Backup complete! Check $BACKUP_DIR"
-echo "🍺 Go grab a beer, you earned it!"`)">
-                        <span>📋</span> Copy
-                    </button>
-                </div>
-                <div class="code-block" style="color: #e0e0e0;">#!/bin/bash
-# Forrest's Backup Script
-
-echo "🔥 Starting Forrest's backup..."
-DATE=$(date +%Y%m%d_%H%M%S)
-BACKUP_DIR=~/backups/$DATE
-
-mkdir -p $BACKUP_DIR
-echo "📁 Created backup folder: $BACKUP_DIR"
-
-# Copy your important stuff here
-cp -r ~/projects $BACKUP_DIR/ 2>/dev/null
-cp -r ~/scripts $BACKUP_DIR/ 2>/dev/null
-
-echo "✅ Backup complete! Check $BACKUP_DIR"
-echo "🍺 Go grab a beer, you earned it!"</div>
-            </div>
-
-            <p style="margin-top: 20px;">To make it executable and run it:</p>
-            <div class="code-container">
-                <div class="code-header">
-                    <span class="code-label">Make It Work</span>
-                    <button class="copy-btn" onclick="copyCode(this, 'chmod +x backup.sh && ./backup.sh')">
-                        <span>📋</span> Copy
-                    </button>
-                </div>
-                <div class="code-block">chmod +x backup.sh && ./backup.sh</div>
-            </div>
-        </section>
-
-        <!-- Storage Access Section -->
-        <section class="section" id="storage">
-            <h2><span class="icon">💾</span> Accessing Your Phone Files</h2>
-            
-            <h3>The Magic Command</h3>
-            <p>By default, Termux can't see your regular phone files. But we can fix that real quick:</p>
-            
-            <div class="code-container">
-                <div class="code-header">
-                    <span class="code-label">Enable Storage Access</span>
-                    <button class="copy-btn" onclick="copyCode(this, 'termux-setup-storage')">
-                        <span>📋</span> Copy This!
-                    </button>
-                </div>
-                <div class="code-block">termux-setup-storage</div>
-            </div>
-
-            <div class="warning info-box">
-                <h4>⚠️ Heads Up</h4>
-                <p>Your phone's gonna ask for storage permission. Just hit "Allow" - we're not doing anything sketchy, just connecting Termux to your files.</p>
-            </div>
-
-            <h3>📂 What You Get</h3>
-            <p>After running that command, you'll have these shortcuts:</p>
-            
-            <div class="command-explorer">
-                <div class="command-item" onclick="showPath('~/storage/downloads')">
-                    <span class="command-name">downloads</span>
-                    <span class="command-desc">Your Downloads folder</span>
-                </div>
-                <div class="command-item" onclick="showPath('~/storage/dcim')">
-                    <span class="command-name">dcim</span>
-                    <span class="command-desc">Camera photos</span>
-                </div>
-                <div class="command-item" onclick="showPath('~/storage/music')">
-                    <span class="command-name">music</span>
-                    <span class="command-desc">Your tunes</span>
-                </div>
-                <div class="command-item" onclick="showPath('~/storage/shared')">
-                    <span class="command-name">shared</span>
-                    <span class="command-desc">Everything else</span>
-                </div>
-            </div>
-
-            <div class="forrest-note info-box">
-                <h4>🔥 Cool Shit You Can Do Now</h4>
-                <p>Check this out - organize your downloads automatically:</p>
-                <div class="code-container">
-                    <div class="code-header">
-                        <span class="code-label">Auto-Organize Downloads</span>
-                        <button class="copy-btn" onclick="copyCode(this, `cd ~/storage/downloads
-mkdir -p Images Docs Videos
-mv *.jpg *.png Images/ 2>/dev/null
-mv *.pdf *.docx Docs/ 2>/dev/null
-mv *.mp4 *.mkv Videos/ 2>/dev/null
-echo 'Downloads organized!'`)">
-                            <span>📋</span> Copy
-                        </button>
-                    </div>
-                    <div class="code-block" style="color: #e0e0e0;">cd ~/storage/downloads
-mkdir -p Images Docs Videos
-mv *.jpg *.png Images/ 2>/dev/null
-mv *.pdf *.docx Docs/ 2>/dev/null
-mv *.mp4 *.mkv Videos/ 2>/dev/null
-echo 'Downloads organized!'</div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Advanced Topics Section -->
-        <section class="section" id="advanced">
-            <h2><span class="icon">🚀</span> Next Level Shit</h2>
-            
-            <h3>🔐 SSH Into Your Phone</h3>
-            <p>Want to control your phone from your computer? Hell yeah, let's do it:</p>
-            
-            <div class="interactive-demo">
-                <ol>
-                    <li>Install SSH:
-                        <div class="code-container">
-                            <div class="code-header">
-                                <span class="code-label">Get OpenSSH</span>
-                                <button class="copy-btn" onclick="copyCode(this, 'pkg install openssh')">
-                                    <span>📋</span> Copy
-                                </button>
-                            </div>
-                            <div class="code-block">pkg install openssh</div>
-                        </div>
-                    </li>
-                    <li>Set a password:
-                        <div class="code-container">
-                            <div class="code-header">
-                                <span class="code-label">Set Password</span>
-                                <button class="copy-btn" onclick="copyCode(this, 'passwd')">
-                                    <span>📋</span> Copy
-                                </button>
-                            </div>
-                            <div class="code-block">passwd</div>
-                        </div>
-                    </li>
-                    <li>Start the SSH server:
-                        <div class="code-container">
-                            <div class="code-header">
-                                <span class="code-label">Fire It Up</span>
-                                <button class="copy-btn" onclick="copyCode(this, 'sshd')">
-                                    <span>📋</span> Copy
-                                </button>
-                            </div>
-                            <div class="code-block">sshd</div>
-                        </div>
-                    </li>
-                </ol>
+            <!-- Terminal Basics -->
+            <section class="section" id="basics">
+                <h2>⌨️ Terminal Basics</h2>
                 
-                <div class="tip info-box">
-                    <h4>💡 How to Connect</h4>
-                    <p>From your computer, use: <code>ssh -p 8022 user@[phone-ip]</code></p>
-                    <p>Find your phone's IP with: <code>ip addr | grep wlan0</code></p>
-                </div>
-            </div>
+                <p>Forrest, think of the terminal as texting your phone. You type a command, hit Enter, and it responds or does something.</p>
 
-            <h3>⚡ Termux API - Control Your Phone!</h3>
-            <p>This is where shit gets really fun. You can control your phone's hardware from the terminal:</p>
-            
-            <div class="code-container">
-                <div class="code-header">
-                    <span class="code-label">Install API Package</span>
-                    <button class="copy-btn" onclick="copyCode(this, 'pkg install termux-api')">
-                        <span>📋</span> Copy
-                    </button>
-                </div>
-                <div class="code-block">pkg install termux-api</div>
-            </div>
+                <h3>Essential Keyboard Shortcuts</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Action</th>
+                            <th>Shortcut</th>
+                            <th>What It Does</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Clear Screen</td>
+                            <td><code>Ctrl+L</code> or <code>clear</code></td>
+                            <td>Cleans up the terminal</td>
+                        </tr>
+                        <tr>
+                            <td>Cancel Command</td>
+                            <td><code>Ctrl+C</code></td>
+                            <td>Stops whatever is running</td>
+                        </tr>
+                        <tr>
+                            <td>Previous Command</td>
+                            <td><code>↑</code> (up arrow)</td>
+                            <td>Recalls last command</td>
+                        </tr>
+                        <tr>
+                            <td>Search History</td>
+                            <td><code>Ctrl+R</code></td>
+                            <td>Search through command history</td>
+                        </tr>
+                        <tr>
+                            <td>Exit Termux</td>
+                            <td><code>exit</code> or <code>Ctrl+D</code></td>
+                            <td>Closes the terminal</td>
+                        </tr>
+                    </tbody>
+                </table>
 
-            <div class="forrest-note info-box">
-                <h4>⚠️ Important!</h4>
-                <p>You also need to install the "Termux:API" app from F-Droid. It's a separate app that works with this package.</p>
-            </div>
-            
-            <div class="command-explorer" style="margin-top: 20px;">
+                <div class="info-box tip-box">
+                    <h4>🎮 Termux Touch Controls</h4>
+                    <p>Can't find the Ctrl key? Here's how to access special keys:</p>
+                    <ul>
+                        <li>Swipe from left edge → Extra keys toolbar</li>
+                        <li>Volume Up + Q → Ctrl+C</li>
+                        <li>Volume Down + K → Up arrow</li>
+                        <li>Or install Hacker's Keyboard from F-Droid</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Essential Commands -->
+            <section class="section" id="commands">
+                <h2>📝 Essential Commands</h2>
+                
+                <h3>Navigation Commands</h3>
+                
+                <div class="command-grid">
+                    <div class="command-card" onclick="showModal('cmd-pwd')">
+                        <div class="command-name">pwd</div>
+                        <div class="command-desc">Print working directory (where am I?)</div>
+                    </div>
+                    <div class="command-card" onclick="showModal('cmd-ls')">
+                        <div class="command-name">ls</div>
+                        <div class="command-desc">List files and folders</div>
+                    </div>
+                    <div class="command-card" onclick="showModal('cmd-cd')">
+                        <div class="command-name">cd</div>
+                        <div class="command-desc">Change directory (move around)</div>
+                    </div>
+                </div>
+
+                <h3>File Operations</h3>
+                
+                <div class="command-grid" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));">
+                    <div class="command-card" onclick="showModal('cmd-touch')">
+                        <div class="command-name">touch</div>
+                        <div class="command-desc">Create a file</div>
+                    </div>
+                    <div class="command-card" onclick="showModal('cmd-mkdir')">
+                        <div class="command-name">mkdir</div>
+                        <div class="command-desc">Create a folder</div>
+                    </div>
+                    <div class="command-card" onclick="showModal('cmd-cp')">
+                        <div class="command-name">cp</div>
+                        <div class="command-desc">Copy files</div>
+                    </div>
+                    <div class="command-card" onclick="showModal('cmd-mv')">
+                        <div class="command-name">mv</div>
+                        <div class="command-desc">Move or rename</div>
+                    </div>
+                    <div class="command-card" onclick="showModal('cmd-rm')">
+                        <div class="command-name">rm</div>
+                        <div class="command-desc">Remove files</div>
+                    </div>
+                    <div class="command-card" onclick="showModal('cmd-cat')">
+                        <div class="command-name">cat</div>
+                        <div class="command-desc">View file contents</div>
+                    </div>
+                </div>
+
+                <h3>Text Editing with Nano</h3>
+                <p>Nano is the easiest text editor for beginners. Here's how to use it:</p>
+
+                <div class="code-container">
+                    <div class="code-header">
+                        <span class="code-label">Open a file in nano</span>
+                        <button class="copy-btn" onclick="copyCode(this, 'nano filename.txt')">
+                            📋 Copy
+                        </button>
+                    </div>
+                    <div class="code-block">nano filename.txt</div>
+                </div>
+
+                <div class="info-box note-box">
+                    <h4>📝 Nano Shortcuts</h4>
+                    <ul>
+                        <li><code>Ctrl+O</code> – Save file (then press Enter)</li>
+                        <li><code>Ctrl+X</code> – Exit nano</li>
+                        <li><code>Ctrl+K</code> – Cut line</li>
+                        <li><code>Ctrl+U</code> – Paste</li>
+                        <li><code>Ctrl+W</code> – Search</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Package Management -->
+            <section class="section" id="packages">
+                <h2>📦 Package Management</h2>
+                
+                <p>The package manager (<code>pkg</code>) is like an app store for Termux. Here's how to use it:</p>
+
+                <div class="command-grid">
+                    <div class="command-card" onclick="showModal('pkg-search')">
+                        <div class="command-name">pkg search [name]</div>
+                        <div class="command-desc">Find available packages</div>
+                    </div>
+                    <div class="command-card" onclick="showModal('pkg-install')">
+                        <div class="command-name">pkg install [name]</div>
+                        <div class="command-desc">Install a package</div>
+                    </div>
+                    <div class="command-card" onclick="showModal('pkg-list')">
+                        <div class="command-name">pkg list-installed</div>
+                        <div class="command-desc">See what's installed</div>
+                    </div>
+                    <div class="command-card" onclick="showModal('pkg-uninstall')">
+                        <div class="command-name">pkg uninstall [name]</div>
+                        <div class="command-desc">Remove a package</div>
+                    </div>
+                </div>
+
+                <h3>Essential Packages to Install</h3>
+                <p>Here's my recommended starter pack:</p>
+
+                <div class="code-container">
+                    <div class="code-header">
+                        <span class="code-label">Install all at once</span>
+                        <button class="copy-btn" onclick="copyCode(this, 'pkg install git wget curl nano python nodejs openssh')">
+                            📋 Copy
+                        </button>
+                    </div>
+                    <div class="code-block">pkg install git wget curl nano python nodejs openssh</div>
+                </div>
+
+                <div class="info-box note-box">
+                    <h4>📦 What Each Package Does</h4>
+                    <ul>
+                        <li><code>git</code> – Version control system</li>
+                        <li><code>wget</code> & <code>curl</code> – Download files from the internet</li>
+                        <li><code>nano</code> – User-friendly text editor</li>
+                        <li><code>python</code> – Python programming language</li>
+                        <li><code>nodejs</code> – JavaScript runtime</li>
+                        <li><code>openssh</code> – SSH client and server</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Real Projects -->
+            <section class="section" id="projects">
+                <h2>🛠️ Real Projects</h2>
+                
+                <h3>Project 1: Python Script</h3>
+                <p>Let's create a simple Python script:</p>
+
+                <div class="code-container">
+                    <div class="code-header">
+                        <span class="code-label">Create and edit a Python file</span>
+                        <button class="copy-btn" onclick="copyCode(this, 'nano hello_forrest.py')">
+                            📋 Copy
+                        </button>
+                    </div>
+                    <div class="code-block">nano hello_forrest.py</div>
+                </div>
+
+                <p>Add this code:</p>
+
+                <div class="code-container">
+                    <div class="code-header">
+                        <span class="code-label">Python code</span>
+                        <button class="copy-btn" onclick="copyCode(this, `#!/usr/bin/env python3
+import random
+import datetime
+
+name = "Forrest"
+now = datetime.datetime.now()
+
+print(f"Hey {name}! Welcome to Python on Termux!")
+print(f"Current time: {now.strftime('%Y-%m-%d %H:%M:%S')}")
+print(f"Your lucky number today is: {random.randint(1, 100)}")`)">
+                            📋 Copy
+                        </button>
+                    </div>
+                    <div class="code-block" style="color: var(--text-primary);">#!/usr/bin/env python3
+import random
+import datetime
+
+name = "Forrest"
+now = datetime.datetime.now()
+
+print(f"Hey {name}! Welcome to Python on Termux!")
+print(f"Current time: {now.strftime('%Y-%m-%d %H:%M:%S')}")
+print(f"Your lucky number today is: {random.randint(1, 100)}")</div>
+                </div>
+
+                <p>Save (Ctrl+O), exit (Ctrl+X), then run it:</p>
+
+                <div class="code-container">
+                    <div class="code-header">
+                        <span class="code-label">Run the script</span>
+                        <button class="copy-btn" onclick="copyCode(this, 'python hello_forrest.py')">
+                            📋 Copy
+                        </button>
+                    </div>
+                    <div class="code-block">python hello_forrest.py</div>
+                </div>
+
+                <h3>Project 2: Web Server</h3>
+                <p>Start a simple web server to share files:</p>
+
+                <div class="code-container">
+                    <div class="code-header">
+                        <span class="code-label">One-line web server</span>
+                        <button class="copy-btn" onclick="copyCode(this, 'python -m http.server 8080')">
+                            📋 Copy
+                        </button>
+                    </div>
+                    <div class="code-block">python -m http.server 8080</div>
+                </div>
+
+                <div class="info-box tip-box">
+                    <h4>💡 How to Access Your Server</h4>
+                    <ol>
+                        <li>Find your phone's IP: <code>ip addr | grep wlan0</code></li>
+                        <li>On any device on the same network, open browser</li>
+                        <li>Go to: <code>http://[your-phone-ip]:8080</code></li>
+                        <li>Press Ctrl+C to stop the server</li>
+                    </ol>
+                </div>
+
+                <h3>Project 3: Backup Script</h3>
+                <p>Create an automated backup script:</p>
+
+                <div class="code-container">
+                    <div class="code-header">
+                        <span class="code-label">backup.sh</span>
+                        <button class="copy-btn" onclick="copyCode(this, `#!/bin/bash
+# Forrest's Backup Script
+
+echo "Starting backup..."
+DATE=$(date +%Y%m%d_%H%M%S)
+BACKUP_DIR=~/backups/$DATE
+
+mkdir -p $BACKUP_DIR
+cp -r ~/projects $BACKUP_DIR/ 2>/dev/null
+cp -r ~/scripts $BACKUP_DIR/ 2>/dev/null
+
+echo "Backup complete: $BACKUP_DIR"`)">
+                            📋 Copy
+                        </button>
+                    </div>
+                    <div class="code-block" style="color: var(--text-primary);">#!/bin/bash
+# Forrest's Backup Script
+
+echo "Starting backup..."
+DATE=$(date +%Y%m%d_%H%M%S)
+BACKUP_DIR=~/backups/$DATE
+
+mkdir -p $BACKUP_DIR
+cp -r ~/projects $BACKUP_DIR/ 2>/dev/null
+cp -r ~/scripts $BACKUP_DIR/ 2>/dev/null
+
+echo "Backup complete: $BACKUP_DIR"</div>
+                </div>
+
+                <p>Make it executable and run:</p>
+
+                <div class="code-container">
+                    <div class="code-header">
+                        <span class="code-label">Make executable and run</span>
+                        <button class="copy-btn" onclick="copyCode(this, 'chmod +x backup.sh && ./backup.sh')">
+                            📋 Copy
+                        </button>
+                    </div>
+                    <div class="code-block">chmod +x backup.sh && ./backup.sh</div>
+                </div>
+            </section>
+
+            <!-- Storage Access -->
+            <section class="section" id="storage">
+                <h2>💾 Accessing Phone Storage</h2>
+                
+                <p>By default, Termux is isolated from your phone's storage. Let's fix that:</p>
+
+                <div class="code-container">
+                    <div class="code-header">
+                        <span class="code-label">Enable storage access</span>
+                        <button class="copy-btn" onclick="copyCode(this, 'termux-setup-storage')">
+                            📋 Copy
+                        </button>
+                    </div>
+                    <div class="code-block">termux-setup-storage</div>
+                </div>
+
+                <div class="info-box warning-box">
+                    <h4>⚠️ Permission Required</h4>
+                    <p>Android will ask for storage permission. Grant it to continue.</p>
+                </div>
+
+                <h3>Storage Shortcuts Created</h3>
+                <p>After running the command, you'll have these shortcuts:</p>
+
+                <div class="command-grid">
+                    <div class="command-card" onclick="showModal('storage-downloads')">
+                        <div class="command-name">~/storage/downloads</div>
+                        <div class="command-desc">Your Downloads folder</div>
+                    </div>
+                    <div class="command-card" onclick="showModal('storage-dcim')">
+                        <div class="command-name">~/storage/dcim</div>
+                        <div class="command-desc">Camera photos and videos</div>
+                    </div>
+                    <div class="command-card" onclick="showModal('storage-music')">
+                        <div class="command-name">~/storage/music</div>
+                        <div class="command-desc">Music folder</div>
+                    </div>
+                    <div class="command-card" onclick="showModal('storage-shared')">
+                        <div class="command-name">~/storage/shared</div>
+                        <div class="command-desc">Main internal storage</div>
+                    </div>
+                </div>
+
+                <h3>Example: Organize Downloads</h3>
+                <p>Here's a script to automatically organize your downloads:</p>
+
+                <div class="code-container">
+                    <div class="code-header">
+                        <span class="code-label">organize_downloads.sh</span>
+                        <button class="copy-btn" onclick="copyCode(this, `cd ~/storage/downloads
+mkdir -p Images Documents Videos Music Archives
+
+# Move files to appropriate folders
+mv *.{jpg,jpeg,png,gif,webp} Images/ 2>/dev/null
+mv *.{pdf,doc,docx,txt} Documents/ 2>/dev/null
+mv *.{mp4,mkv,avi,mov} Videos/ 2>/dev/null
+mv *.{mp3,flac,m4a,wav} Music/ 2>/dev/null
+mv *.{zip,rar,7z,tar,gz} Archives/ 2>/dev/null
+
+echo "Downloads organized!"`)">
+                            📋 Copy
+                        </button>
+                    </div>
+                    <div class="code-block" style="color: var(--text-primary);">cd ~/storage/downloads
+mkdir -p Images Documents Videos Music Archives
+
+# Move files to appropriate folders
+mv *.{jpg,jpeg,png,gif,webp} Images/ 2>/dev/null
+mv *.{pdf,doc,docx,txt} Documents/ 2>/dev/null
+mv *.{mp4,mkv,avi,mov} Videos/ 2>/dev/null
+mv *.{mp3,flac,m4a,wav} Music/ 2>/dev/null
+mv *.{zip,rar,7z,tar,gz} Archives/ 2>/dev/null
+
+echo "Downloads organized!"</div>
+                </div>
+            </section>
+
+            <!-- Advanced Topics -->
+            <section class="section" id="advanced">
+                <h2>🚀 Advanced Topics</h2>
+                
+                <h3>SSH Access</h3>
+                <p>Control your phone from your computer via SSH:</p>
+
+                <div class="code-container">
+                    <div class="code-header">
+                        <span class="code-label">Start SSH server</span>
+                        <button class="copy-btn" onclick="copyCode(this, 'sshd')">
+                            📋 Copy
+                        </button>
+                    </div>
+                    <div class="code-block">sshd</div>
+                </div>
+
+                <div class="info-box note-box">
+                    <h4>📝 SSH Connection Info</h4>
+                    <ul>
+                        <li>Default port: 8022</li>
+                        <li>Username: Get with <code>whoami</code></li>
+                        <li>Password: Set with <code>passwd</code></li>
+                        <li>Connect: <code>ssh -p 8022 user@phone-ip</code></li>
+                    </ul>
+                </div>
+
+                <h3>Termux API</h3>
+                <p>Control your phone's hardware from the terminal:</p>
+
+                <div class="code-container">
+                    <div class="code-header">
+                        <span class="code-label">Install Termux API</span>
+                        <button class="copy-btn" onclick="copyCode(this, 'pkg install termux-api')">
+                            📋 Copy
+                        </button>
+                    </div>
+                    <div class="code-block">pkg install termux-api</div>
+                </div>
+
+                <div class="info-box warning-box">
+                    <h4>⚠️ Important</h4>
+                    <p>You also need to install the "Termux:API" app from F-Droid for this to work.</p>
+                </div>
+
                 <h4>Cool API Commands</h4>
-                <div class="command-item" onclick="showAPICommand('termux-battery-status')">
-                    <span class="command-name">battery-status</span>
-                    <span class="command-desc">Check battery info</span>
+                <div class="command-grid" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));">
+                    <div class="command-card" onclick="showModal('api-battery')">
+                        <div class="command-name">termux-battery-status</div>
+                        <div class="command-desc">Get battery information</div>
+                    </div>
+                    <div class="command-card" onclick="showModal('api-camera')">
+                        <div class="command-name">termux-camera-photo</div>
+                        <div class="command-desc">Take a photo</div>
+                    </div>
+                    <div class="command-card" onclick="showModal('api-clipboard')">
+                        <div class="command-name">termux-clipboard-get/set</div>
+                        <div class="command-desc">Access clipboard</div>
+                    </div>
+                    <div class="command-card" onclick="showModal('api-notification')">
+                        <div class="command-name">termux-notification</div>
+                        <div class="command-desc">Send notifications</div>
+                    </div>
+                    <div class="command-card" onclick="showModal('api-sms')">
+                        <div class="command-name">termux-sms-send</div>
+                        <div class="command-desc">Send SMS messages</div>
+                    </div>
+                    <div class="command-card" onclick="showModal('api-torch')">
+                        <div class="command-name">termux-torch</div>
+                        <div class="command-desc">Control flashlight</div>
+                    </div>
                 </div>
-                <div class="command-item" onclick="showAPICommand('termux-camera-photo photo.jpg')">
-                    <span class="command-name">camera-photo</span>
-                    <span class="command-desc">Take a photo</span>
+
+                <h3>Performance Tips</h3>
+                <div class="info-box tip-box">
+                    <h4>⚡ Make Termux Faster</h4>
+                    <ul>
+                        <li>Keep Termux running: <code>termux-wake-lock</code></li>
+                        <li>Clean package cache: <code>pkg clean</code></li>
+                        <li>Use tmux for multiple sessions: <code>pkg install tmux</code></li>
+                        <li>Install zsh for better shell: <code>pkg install zsh</code></li>
+                    </ul>
                 </div>
-                <div class="command-item" onclick="showAPICommand('termux-clipboard-get')">
-                    <span class="command-name">clipboard-get</span>
-                    <span class="command-desc">Read clipboard</span>
+            </section>
+
+            <!-- Troubleshooting -->
+            <section class="section" id="troubleshooting">
+                <h2>🔧 Troubleshooting</h2>
+                
+                <div class="info-box danger-box">
+                    <h4>❌ Permission Denied Errors</h4>
+                    <p><strong>Problem:</strong> Can't access certain directories</p>
+                    <p><strong>Solution:</strong> Termux has limited permissions. Use <code>termux-setup-storage</code> and work within your home directory or storage folders.</p>
                 </div>
-                <div class="command-item" onclick="showAPICommand('termux-notification -t \"Yo Forrest!\" -c \"Task complete!\"')">
-                    <span class="command-name">notification</span>
-                    <span class="command-desc">Send notification</span>
+
+                <div class="info-box danger-box">
+                    <h4>❌ Package Not Found</h4>
+                    <p><strong>Problem:</strong> Can't install packages</p>
+                    <p><strong>Solutions:</strong></p>
+                    <ol>
+                        <li>Update first: <code>pkg update</code></li>
+                        <li>Check your internet connection</li>
+                        <li>Try changing repository: <code>termux-change-repo</code></li>
+                    </ol>
                 </div>
-                <div class="command-item" onclick="showAPICommand('termux-torch on')">
-                    <span class="command-name">torch</span>
-                    <span class="command-desc">Flashlight control</span>
+
+                <div class="info-box danger-box">
+                    <h4>❌ Keyboard Issues</h4>
+                    <p><strong>Problem:</strong> Can't use special keys</p>
+                    <p><strong>Solutions:</strong></p>
+                    <ul>
+                        <li>Enable extra keys in Termux settings</li>
+                        <li>Use Volume+Key combos</li>
+                        <li>Install Hacker's Keyboard from F-Droid</li>
+                    </ul>
                 </div>
-            </div>
 
-            <h3>🎨 Make It Pretty</h3>
-            <p>Want to customize how Termux looks? We got you:</p>
-            
-            <div class="code-container">
-                <div class="code-header">
-                    <span class="code-label">Change Colors & Fonts</span>
-                    <button class="copy-btn" onclick="copyCode(this, 'termux-style')">
-                        <span>📋</span> Copy
-                    </button>
+                <div class="info-box tip-box">
+                    <h4>💡 Still Need Help?</h4>
+                    <p>Check out these resources:</p>
+                    <ul>
+                        <li><a href="https://wiki.termux.com" target="_blank" style="color: var(--primary);">Official Wiki</a></li>
+                        <li><a href="https://reddit.com/r/termux" target="_blank" style="color: var(--primary);">r/termux on Reddit</a></li>
+                        <li><a href="https://github.com/termux/termux-app/issues" target="_blank" style="color: var(--primary);">GitHub Issues</a></li>
+                    </ul>
                 </div>
-                <div class="code-block">termux-style</div>
-            </div>
+            </section>
 
-            <div class="tip info-box">
-                <h4>💡 Other Cool Customizations</h4>
-                <ul>
-                    <li>Long press → More → Style → Change font</li>
-                    <li>Enable extra keys row in settings</li>
-                    <li>Install zsh and oh-my-zsh for a fancy prompt</li>
-                </ul>
-            </div>
-        </section>
-
-        <!-- Troubleshooting Section -->
-        <section class="section">
-            <h2><span class="icon">🔧</span> When Shit Goes Wrong</h2>
-            
-            <h3>Common Problems & How to Fix 'Em</h3>
-            
-            <div class="warning info-box">
-                <h4>📱 "Permission Denied" Bullshit</h4>
-                <p><strong>The Problem:</strong> Can't access some folders</p>
-                <p><strong>The Fix:</strong> You probably forgot to run <code>termux-setup-storage</code>. Also, Termux can't access everything - work in your home folder or storage folders.</p>
-            </div>
-
-            <div class="warning info-box">
-                <h4>📦 "Package Not Found" Errors</h4>
-                <p><strong>The Problem:</strong> Can't install shit</p>
-                <p><strong>The Fix:</strong></p>
-                <ol>
-                    <li>Run <code>pkg update</code> first</li>
-                    <li>Make sure you're connected to WiFi</li>
-                    <li>Try <code>termux-change-repo</code> to switch mirrors</li>
-                </ol>
-            </div>
-
-            <div class="warning info-box">
-                <h4>⌨️ Keyboard Acting Weird</h4>
-                <p><strong>The Problem:</strong> Can't use Ctrl or special keys</p>
-                <p><strong>The Fix:</strong> Get Hacker's Keyboard from F-Droid, or use the Volume+Key combos I showed you earlier.</p>
-            </div>
-
-            <div class="forrest-note info-box">
-                <h4>🍺 Still Stuck?</h4>
-                <p>Hit me up, man. Or check out r/termux on Reddit - those nerds know everything.</p>
-            </div>
-        </section>
-
-        <!-- Resources Section -->
-        <section class="section">
-            <h2><span class="icon">📚</span> Where to Go From Here</h2>
-            
-            <h3>🎯 Shit to Learn Next</h3>
-            <div class="command-explorer">
-                <div class="command-item">
-                    <span class="command-name">Bash Scripting</span>
-                    <span class="command-desc">Automate everything</span>
+            <!-- Final Words -->
+            <section class="section">
+                <h2>🎉 You Made It!</h2>
+                
+                <div class="info-box note-box">
+                    <h4>🌟 Final Thoughts</h4>
+                    <p>Forrest, you've got everything you need to start using Termux like a pro. Remember:</p>
+                    <ul>
+                        <li>Start simple – don't try to learn everything at once</li>
+                        <li>Google is your friend when you're stuck</li>
+                        <li>You can't break your phone with Termux</li>
+                        <li>The more you use it, the more natural it becomes</li>
+                    </ul>
+                    <p style="margin-top: 20px; text-align: center; font-size: 1.2em;">
+                        <span class="forrest-highlight">Now go build something awesome! 🚀</span>
+                    </p>
                 </div>
-                <div class="command-item">
-                    <span class="command-name">Git & GitHub</span>
-                    <span class="command-desc">Version control like a pro</span>
-                </div>
-                <div class="command-item">
-                    <span class="command-name">Python Projects</span>
-                    <span class="command-desc">Build actual useful stuff</span>
-                </div>
-                <div class="command-item">
-                    <span class="command-name">tmux</span>
-                    <span class="command-desc">Multiple terminal sessions</span>
-                </div>
-            </div>
-
-            <h3>🔗 Useful Links</h3>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 20px;">
-                <a href="https://wiki.termux.com" class="btn" target="_blank">Official Wiki</a>
-                <a href="https://reddit.com/r/termux" class="btn" target="_blank">Reddit Community</a>
-                <a href="https://github.com/termux" class="btn" target="_blank">GitHub Stuff</a>
-                <a href="https://t.me/termux" class="btn" target="_blank">Telegram Group</a>
-            </div>
-
-            <div class="forrest-note info-box" style="margin-top: 30px;">
-                <h4>🌟 Final Words, Forrest</h4>
-                <p>Dude, you got this. The terminal might seem weird at first, but once you get comfortable with it, you'll wonder how you ever lived without it.</p>
-                <p style="margin-top: 15px;">Remember:</p>
-                <ul>
-                    <li>You can't break your phone with Termux</li>
-                    <li>Google is your friend when you're stuck</li>
-                    <li>The more you use it, the easier it gets</li>
-                    <li>It's okay to forget commands - that's what this guide is for</li>
-                </ul>
-                <p style="margin-top: 20px; text-align: center; font-style: italic; font-size: 1.2em;">
-                    <span class="forrest-special">Now go forth and hack the planet! 🚀</span>
-                </p>
-            </div>
-        </section>
-    </main>
-
-    <!-- Floating Action Button -->
-    <div class="fab" onclick="scrollToTop()">
-        ↑
+            </section>
+        </main>
     </div>
 
-    <!-- Modal System -->
+    <!-- Mobile Menu Toggle -->
+    <button class="mobile-menu-toggle" onclick="toggleMobileNav()">
+        ☰
+    </button>
+
+    <!-- Modal -->
     <div class="modal" id="modal">
         <div class="modal-content">
-            <button class="modal-close" onclick="closeModal()">×</button>
-            <div id="modalContent"></div>
+            <div class="modal-header">
+                <h3 id="modalTitle">Modal Title</h3>
+                <button class="modal-close" onclick="closeModal()">×</button>
+            </div>
+            <div id="modalBody">Modal content goes here</div>
         </div>
     </div>
 
-    <!-- Loading Indicator -->
-    <div class="loader" id="loader">
-        <div class="loader-circle"></div>
-    </div>
-
     <script>
-        // Sidebar Toggle
-        const sidebar = document.getElementById('sidebar');
-        const sidebarToggle = document.getElementById('sidebarToggle');
-        const mainContent = document.getElementById('mainContent');
-        
-        sidebarToggle.addEventListener('click', () => {
-            sidebar.classList.toggle('active');
-            sidebarToggle.classList.toggle('active');
-            mainContent.classList.toggle('shifted');
-        });
-
-        // Progress Bar
+        // Progress bar
         window.addEventListener('scroll', () => {
             const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
             const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
@@ -1560,12 +1329,35 @@ echo 'Downloads organized!'</div>
             document.getElementById('progressBar').style.width = scrolled + '%';
         });
 
+        // Navigation highlighting
+        const sections = document.querySelectorAll('.section');
+        const navItems = document.querySelectorAll('.nav-item');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (scrollY >= sectionTop - 200) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navItems.forEach(item => {
+                item.classList.remove('active');
+                if (item.getAttribute('href').substring(1) === current) {
+                    item.classList.add('active');
+                }
+            });
+        });
+
         // Copy functionality
         function copyCode(button, text) {
             navigator.clipboard.writeText(text).then(() => {
-                button.classList.add('copied');
                 const originalText = button.innerHTML;
-                button.innerHTML = '<span>✓</span> Copied!';
+                button.classList.add('copied');
+                button.innerHTML = '✓ Copied!';
+                
                 setTimeout(() => {
                     button.classList.remove('copied');
                     button.innerHTML = originalText;
@@ -1573,266 +1365,761 @@ echo 'Downloads organized!'</div>
             });
         }
 
-        function copyCommand(cmd) {
-            navigator.clipboard.writeText(cmd).then(() => {
-                showNotification('Command copied! 🎉');
+        function copyQuickCommand(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                // Show a subtle feedback
+                const el = event.target;
+                el.style.color = 'var(--accent)';
+                setTimeout(() => {
+                    el.style.color = 'var(--primary)';
+                }, 1000);
             });
         }
 
-        // Modal functions
-        function openModal(content) {
-            const modal = document.getElementById('modal');
-            const modalContent = document.getElementById('modalContent');
-            
-            const modalData = {
-                'fdroid-details': `
-                    <h3>Getting F-Droid (The Easy Way)</h3>
-                    <p>Alright Forrest, here's what you do:</p>
+        // Modal functionality
+        const modal = document.getElementById('modal');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalBody = document.getElementById('modalBody');
+
+        const modalContent = {
+            // Installation modals
+            'fdroid-step1': {
+                title: 'Step 1: Getting F-Droid',
+                content: `
+                    <p>F-Droid is a trusted open-source app repository. Here's how to get it:</p>
                     <ol>
-                        <li>Go to <a href="https://f-droid.org" target="_blank">f-droid.org</a> on your phone</li>
-                        <li>Hit that big ass "Download F-Droid" button</li>
-                        <li>Your browser will download the APK</li>
-                        <li>Open your Downloads and tap that APK</li>
-                        <li>Android's gonna whine about "unknown sources" - just allow it</li>
+                        <li>Open your browser and go to <a href="https://f-droid.org" target="_blank" style="color: var(--primary);">f-droid.org</a></li>
+                        <li>Tap the "Download F-Droid" button</li>
+                        <li>Once downloaded, open the APK from your notifications or downloads folder</li>
+                        <li>Android will ask to install from unknown sources – allow it</li>
+                        <li>Complete the installation</li>
                     </ol>
-                    <div class="tip info-box">
-                        <h4>💡 Why We Trust F-Droid</h4>
-                        <p>It's all open-source apps, no bullshit, no ads, no tracking. Just good software.</p>
+                    <div class="info-box tip-box" style="margin-top: 20px;">
+                        <h4>💡 Note</h4>
+                        <p>F-Droid is completely safe and only hosts open-source apps.</p>
                     </div>
-                `,
-                'fdroid-install': `
-                    <h3>Installing Termux from F-Droid</h3>
-                    <p>Once you got F-Droid installed:</p>
+                `
+            },
+            'fdroid-step2': {
+                title: 'Step 2: Installing Termux',
+                content: `
+                    <p>Once you have F-Droid installed:</p>
                     <ol>
                         <li>Open F-Droid</li>
-                        <li>First time? It'll update its database (takes a minute)</li>
+                        <li>Wait for it to update its repository (first time only)</li>
                         <li>Search for "Termux"</li>
-                        <li>Tap on Termux (by Fredrik Fornwall)</li>
-                        <li>Hit "Install"</li>
-                        <li>Wait for it... boom! You're done</li>
+                        <li>Select Termux by Fredrik Fornwall</li>
+                        <li>Tap "Install"</li>
+                        <li>Wait for download and installation</li>
                     </ol>
-                    <div class="warning info-box">
-                        <h4>⚠️ Remember This</h4>
-                        <p>If you get Termux from F-Droid, get ALL the add-ons from F-Droid too. Don't mix sources or shit won't work right.</p>
+                    <div class="info-box warning-box" style="margin-top: 20px;">
+                        <h4>⚠️ Important</h4>
+                        <p>Always get Termux add-ons from the same source. If you use F-Droid, get all add-ons from F-Droid.</p>
                     </div>
-                `,
-                'fdroid-addons': `
-                    <h3>Cool Add-ons You Might Want</h3>
-                    <p>These are optional but pretty dope:</p>
-                    <div class="command-explorer">
-                        <div class="command-item">
-                            <span class="command-name">Termux:API</span>
-                            <span class="command-desc">Control phone hardware (camera, SMS, etc)</span>
-                        </div>
-                        <div class="command-item">
-                            <span class="command-name">Termux:Styling</span>
-                            <span class="command-desc">Change colors and fonts</span>
-                        </div>
-                        <div class="command-item">
-                            <span class="command-name">Termux:Widget</span>
-                            <span class="command-desc">Run scripts from home screen</span>
-                        </div>
-                        <div class="command-item">
-                            <span class="command-name">Termux:Boot</span>
-                            <span class="command-desc">Run stuff when phone starts</span>
-                        </div>
-                    </div>
-                    <p style="margin-top: 20px;">Just search for these in F-Droid and install the ones you want. I'd at least get the API one - it's sick.</p>
                 `
-            };
+            },
+            'fdroid-step3': {
+                title: 'Step 3: Optional Add-ons',
+                content: `
+                    <p>These add-ons extend Termux functionality:</p>
+                    <ul>
+                        <li><strong>Termux:API</strong> - Access device hardware (camera, sensors, etc.)</li>
+                        <li><strong>Termux:Styling</strong> - Customize colors and fonts</li>
+                        <li><strong>Termux:Widget</strong> - Run scripts from home screen widgets</li>
+                        <li><strong>Termux:Boot</strong> - Run scripts on device boot</li>
+                        <li><strong>Termux:Float</strong> - Run Termux in a floating window</li>
+                    </ul>
+                    <p style="margin-top: 20px;">To install any of these, search for them in F-Droid just like you did with Termux.</p>
+                `
+            },
             
-            modalContent.innerHTML = modalData[content] || '<p>Content not found</p>';
-            modal.style.display = 'block';
+            // Customization modals
+            'customize-colors': {
+                title: 'Customizing Termux Appearance',
+                content: `
+                    <p>Make Termux look the way you want:</p>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span class="code-label">Change color scheme</span>
+                            <button class="copy-btn" onclick="copyCode(this, 'termux-style')">
+                                📋 Copy
+                            </button>
+                        </div>
+                        <div class="code-block">termux-style</div>
+                    </div>
+                    <p>This opens an interactive menu where you can:</p>
+                    <ul>
+                        <li>Choose from various color schemes</li>
+                        <li>Select different fonts</li>
+                        <li>Preview changes before applying</li>
+                    </ul>
+                    <div class="info-box tip-box" style="margin-top: 20px;">
+                        <h4>💡 Alternative Method</h4>
+                        <p>Long press anywhere → More → Style</p>
+                    </div>
+                `
+            },
+            'extra-keys': {
+                title: 'Enabling Extra Keys',
+                content: `
+                    <p>Get quick access to special keys:</p>
+                    <ol>
+                        <li>Open Termux settings (long press → More → Settings)</li>
+                        <li>Go to "Keyboard" section</li>
+                        <li>Enable "Extra Keys Row"</li>
+                    </ol>
+                    <p style="margin-top: 20px;">This adds a row above your keyboard with commonly used keys like:</p>
+                    <ul>
+                        <li>ESC, TAB, CTRL, ALT</li>
+                        <li>Arrow keys</li>
+                        <li>Special characters</li>
+                    </ul>
+                `
+            },
+            
+            // Command modals
+            'cmd-pwd': {
+                title: 'pwd - Print Working Directory',
+                content: `
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span class="code-label">Basic usage</span>
+                            <button class="copy-btn" onclick="copyCode(this, 'pwd')">
+                                📋 Copy
+                            </button>
+                        </div>
+                        <div class="code-block">pwd</div>
+                    </div>
+                    <p><strong>What it does:</strong> Shows your current location in the file system</p>
+                    <p><strong>Example output:</strong></p>
+                    <pre style="background: var(--bg-code); padding: 10px; border-radius: 4px;">/data/data/com.termux/files/home</pre>
+                    <p><strong>When to use:</strong> When you're lost and need to know where you are</p>
+                `
+            },
+            'cmd-ls': {
+                title: 'ls - List Directory Contents',
+                content: `
+                    <p>Common usage patterns:</p>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span class="code-label">Basic listing</span>
+                            <button class="copy-btn" onclick="copyCode(this, 'ls')">
+                                📋 Copy
+                            </button>
+                        </div>
+                        <div class="code-block">ls</div>
+                    </div>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span class="code-label">Detailed view with hidden files</span>
+                            <button class="copy-btn" onclick="copyCode(this, 'ls -la')">
+                                📋 Copy
+                            </button>
+                        </div>
+                        <div class="code-block">ls -la</div>
+                    </div>
+                    <p><strong>Useful options:</strong></p>
+                    <ul>
+                        <li><code>-l</code> - Long format (shows permissions, size, date)</li>
+                        <li><code>-a</code> - Show all files (including hidden)</li>
+                        <li><code>-h</code> - Human readable sizes (KB, MB, GB)</li>
+                        <li><code>-t</code> - Sort by modification time</li>
+                    </ul>
+                `
+            },
+            'cmd-cd': {
+                title: 'cd - Change Directory',
+                content: `
+                    <p>Navigate through folders:</p>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span class="code-label">Go to home directory</span>
+                            <button class="copy-btn" onclick="copyCode(this, 'cd ~')">
+                                📋 Copy
+                            </button>
+                        </div>
+                        <div class="code-block">cd ~</div>
+                    </div>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span class="code-label">Go up one level</span>
+                            <button class="copy-btn" onclick="copyCode(this, 'cd ..')">
+                                📋 Copy
+                            </button>
+                        </div>
+                        <div class="code-block">cd ..</div>
+                    </div>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span class="code-label">Go to specific folder</span>
+                            <button class="copy-btn" onclick="copyCode(this, 'cd /sdcard/Download')">
+                                📋 Copy
+                            </button>
+                        </div>
+                        <div class="code-block">cd /sdcard/Download</div>
+                    </div>
+                    <p><strong>Tips:</strong></p>
+                    <ul>
+                        <li>Use Tab to autocomplete folder names</li>
+                        <li><code>cd -</code> goes back to previous directory</li>
+                        <li>Just <code>cd</code> alone takes you home</li>
+                    </ul>
+                `
+            },
+            'cmd-touch': {
+                title: 'touch - Create Files',
+                content: `
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span class="code-label">Create a new file</span>
+                            <button class="copy-btn" onclick="copyCode(this, 'touch newfile.txt')">
+                                📋 Copy
+                            </button>
+                        </div>
+                        <div class="code-block">touch newfile.txt</div>
+                    </div>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span class="code-label">Create multiple files</span>
+                            <button class="copy-btn" onclick="copyCode(this, 'touch file1.txt file2.txt file3.txt')">
+                                📋 Copy
+                            </button>
+                        </div>
+                        <div class="code-block">touch file1.txt file2.txt file3.txt</div>
+                    </div>
+                    <p><strong>What it does:</strong> Creates empty files or updates timestamps of existing files</p>
+                    <p><strong>Fun fact:</strong> Originally meant to "touch" files to update their modification time</p>
+                `
+            },
+            'cmd-mkdir': {
+                title: 'mkdir - Make Directory',
+                content: `
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span class="code-label">Create a folder</span>
+                            <button class="copy-btn" onclick="copyCode(this, 'mkdir myfolder')">
+                                📋 Copy
+                            </button>
+                        </div>
+                        <div class="code-block">mkdir myfolder</div>
+                    </div>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span class="code-label">Create nested folders</span>
+                            <button class="copy-btn" onclick="copyCode(this, 'mkdir -p projects/python/scripts')">
+                                📋 Copy
+                            </button>
+                        </div>
+                        <div class="code-block">mkdir -p projects/python/scripts</div>
+                    </div>
+                    <p><strong>Useful option:</strong></p>
+                    <ul>
+                        <li><code>-p</code> - Create parent directories if they don't exist</li>
+                    </ul>
+                `
+            },
+            'cmd-cp': {
+                title: 'cp - Copy Files',
+                content: `
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span class="code-label">Copy a file</span>
+                            <button class="copy-btn" onclick="copyCode(this, 'cp source.txt destination.txt')">
+                                📋 Copy
+                            </button>
+                        </div>
+                        <div class="code-block">cp source.txt destination.txt</div>
+                    </div>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span class="code-label">Copy folder recursively</span>
+                            <button class="copy-btn" onclick="copyCode(this, 'cp -r sourcefolder/ destinationfolder/')">
+                                📋 Copy
+                            </button>
+                        </div>
+                        <div class="code-block">cp -r sourcefolder/ destinationfolder/</div>
+                    </div>
+                    <p><strong>Common options:</strong></p>
+                    <ul>
+                        <li><code>-r</code> - Copy directories recursively</li>
+                        <li><code>-i</code> - Ask before overwriting</li>
+                        <li><code>-v</code> - Verbose (show what's being copied)</li>
+                    </ul>
+                `
+            },
+            'cmd-mv': {
+                title: 'mv - Move or Rename',
+                content: `
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span class="code-label">Rename a file</span>
+                            <button class="copy-btn" onclick="copyCode(this, 'mv oldname.txt newname.txt')">
+                                📋 Copy
+                            </button>
+                        </div>
+                        <div class="code-block">mv oldname.txt newname.txt</div>
+                    </div>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span class="code-label">Move to another folder</span>
+                            <button class="copy-btn" onclick="copyCode(this, 'mv file.txt ~/Documents/')">
+                                📋 Copy
+                            </button>
+                        </div>
+                        <div class="code-block">mv file.txt ~/Documents/</div>
+                    </div>
+                    <p><strong>Tips:</strong></p>
+                    <ul>
+                        <li>Works for both files and folders</li>
+                        <li>Be careful - mv overwrites without asking!</li>
+                        <li>Use <code>-i</code> to prompt before overwriting</li>
+                    </ul>
+                `
+            },
+            'cmd-rm': {
+                title: 'rm - Remove Files',
+                content: `
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span class="code-label">Delete a file</span>
+                            <button class="copy-btn" onclick="copyCode(this, 'rm unwanted.txt')">
+                                📋 Copy
+                            </button>
+                        </div>
+                        <div class="code-block">rm unwanted.txt</div>
+                    </div>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span class="code-label">Delete a folder and contents</span>
+                            <button class="copy-btn" onclick="copyCode(this, 'rm -rf unwantedfolder/')">
+                                📋 Copy
+                            </button>
+                        </div>
+                        <div class="code-block">rm -rf unwantedfolder/</div>
+                    </div>
+                    <div class="info-box warning-box" style="margin-top: 20px;">
+                        <h4>⚠️ Be Careful!</h4>
+                        <p>There's no trash/recycle bin in terminal. Deleted files are gone forever!</p>
+                        <ul>
+                            <li><code>-r</code> - Remove directories recursively</li>
+                            <li><code>-f</code> - Force (don't ask for confirmation)</li>
+                            <li><code>-i</code> - Interactive (ask before each deletion)</li>
+                        </ul>
+                    </div>
+                `
+            },
+            'cmd-cat': {
+                title: 'cat - View File Contents',
+                content: `
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span class="code-label">View a file</span>
+                            <button class="copy-btn" onclick="copyCode(this, 'cat filename.txt')">
+                                📋 Copy
+                            </button>
+                        </div>
+                        <div class="code-block">cat filename.txt</div>
+                    </div>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span class="code-label">Combine files</span>
+                            <button class="copy-btn" onclick="copyCode(this, 'cat file1.txt file2.txt > combined.txt')">
+                                📋 Copy
+                            </button>
+                        </div>
+                        <div class="code-block">cat file1.txt file2.txt > combined.txt</div>
+                    </div>
+                    <p><strong>Name origin:</strong> "cat" is short for "concatenate"</p>
+                    <p><strong>Alternatives for long files:</strong></p>
+                    <ul>
+                        <li><code>less filename.txt</code> - Page through files</li>
+                        <li><code>head filename.txt</code> - Show first 10 lines</li>
+                        <li><code>tail filename.txt</code> - Show last 10 lines</li>
+                    </ul>
+                `
+            },
+            
+            // Package management modals
+            'pkg-search': {
+                title: 'Searching for Packages',
+                content: `
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span class="code-label">Search for Python packages</span>
+                            <button class="copy-btn" onclick="copyCode(this, 'pkg search python')">
+                                📋 Copy
+                            </button>
+                        </div>
+                        <div class="code-block">pkg search python</div>
+                    </div>
+                    <p>This shows all packages with "python" in the name or description.</p>
+                    <p><strong>Tips:</strong></p>
+                    <ul>
+                        <li>Use partial names - "pyth" will find Python</li>
+                        <li>Results show package name and description</li>
+                        <li>Look for the exact package name for installation</li>
+                    </ul>
+                `
+            },
+            'pkg-install': {
+                title: 'Installing Packages',
+                content: `
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span class="code-label">Install a single package</span>
+                            <button class="copy-btn" onclick="copyCode(this, 'pkg install python')">
+                                📋 Copy
+                            </button>
+                        </div>
+                        <div class="code-block">pkg install python</div>
+                    </div>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span class="code-label">Install multiple packages</span>
+                            <button class="copy-btn" onclick="copyCode(this, 'pkg install git wget nano')">
+                                📋 Copy
+                            </button>
+                        </div>
+                        <div class="code-block">pkg install git wget nano</div>
+                    </div>
+                    <p><strong>What happens:</strong></p>
+                    <ol>
+                        <li>Downloads the package and dependencies</li>
+                        <li>Shows what will be installed</li>
+                        <li>Asks for confirmation (type Y)</li>
+                        <li>Installs everything</li>
+                    </ol>
+                `
+            },
+            'pkg-list': {
+                title: 'Listing Installed Packages',
+                content: `
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span class="code-label">Show all installed packages</span>
+                            <button class="copy-btn" onclick="copyCode(this, 'pkg list-installed')">
+                                📋 Copy
+                            </button>
+                        </div>
+                        <div class="code-block">pkg list-installed</div>
+                    </div>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span class="code-label">Search installed packages</span>
+                            <button class="copy-btn" onclick="copyCode(this, 'pkg list-installed | grep python')">
+                                📋 Copy
+                            </button>
+                        </div>
+                        <div class="code-block">pkg list-installed | grep python</div>
+                    </div>
+                    <p>This helps you see what's already installed on your system.</p>
+                `
+            },
+            'pkg-uninstall': {
+                title: 'Removing Packages',
+                content: `
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span class="code-label">Remove a package</span>
+                            <button class="copy-btn" onclick="copyCode(this, 'pkg uninstall packagename')">
+                                📋 Copy
+                            </button>
+                        </div>
+                        <div class="code-block">pkg uninstall packagename</div>
+                    </div>
+                    <p><strong>Note:</strong> This removes the package but keeps configuration files.</p>
+                    <p>To completely remove everything:</p>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span class="code-label">Complete removal</span>
+                            <button class="copy-btn" onclick="copyCode(this, 'pkg uninstall packagename && pkg clean')">
+                                📋 Copy
+                            </button>
+                        </div>
+                        <div class="code-block">pkg uninstall packagename && pkg clean</div>
+                    </div>
+                `
+            },
+            
+            // Storage modals
+            'storage-downloads': {
+                title: 'Downloads Folder Access',
+                content: `
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span class="code-label">Navigate to Downloads</span>
+                            <button class="copy-btn" onclick="copyCode(this, 'cd ~/storage/downloads')">
+                                📋 Copy
+                            </button>
+                        </div>
+                        <div class="code-block">cd ~/storage/downloads</div>
+                    </div>
+                    <p>This gives you access to your Android Downloads folder.</p>
+                    <p><strong>Example uses:</strong></p>
+                    <ul>
+                        <li>Process downloaded files</li>
+                        <li>Organize downloads by type</li>
+                        <li>Run scripts on downloaded data</li>
+                    </ul>
+                `
+            },
+            'storage-dcim': {
+                title: 'Camera Folder Access',
+                content: `
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span class="code-label">Navigate to camera photos</span>
+                            <button class="copy-btn" onclick="copyCode(this, 'cd ~/storage/dcim')">
+                                📋 Copy
+                            </button>
+                        </div>
+                        <div class="code-block">cd ~/storage/dcim</div>
+                    </div>
+                    <p>Access your camera photos and videos.</p>
+                    <p><strong>Cool things you can do:</strong></p>
+                    <ul>
+                        <li>Batch rename photos</li>
+                        <li>Compress images</li>
+                        <li>Organize by date</li>
+                        <li>Generate thumbnails</li>
+                    </ul>
+                `
+            },
+            'storage-music': {
+                title: 'Music Folder Access',
+                content: `
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span class="code-label">Navigate to Music</span>
+                            <button class="copy-btn" onclick="copyCode(this, 'cd ~/storage/music')">
+                                📋 Copy
+                            </button>
+                        </div>
+                        <div class="code-block">cd ~/storage/music</div>
+                    </div>
+                    <p>Access your music files for processing or organization.</p>
+                `
+            },
+            'storage-shared': {
+                title: 'Main Storage Access',
+                content: `
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span class="code-label">Navigate to main storage</span>
+                            <button class="copy-btn" onclick="copyCode(this, 'cd ~/storage/shared')">
+                                📋 Copy
+                            </button>
+                        </div>
+                        <div class="code-block">cd ~/storage/shared</div>
+                    </div>
+                    <p>This is your main internal storage - equivalent to /sdcard/</p>
+                    <p><strong>Note:</strong> You can access all your Android folders from here.</p>
+                `
+            },
+            
+            // API modals
+            'api-battery': {
+                title: 'Battery Status API',
+                content: `
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span class="code-label">Get battery info</span>
+                            <button class="copy-btn" onclick="copyCode(this, 'termux-battery-status')">
+                                📋 Copy
+                            </button>
+                        </div>
+                        <div class="code-block">termux-battery-status</div>
+                    </div>
+                    <p><strong>Returns JSON with:</strong></p>
+                    <ul>
+                        <li>Battery percentage</li>
+                        <li>Charging status</li>
+                        <li>Temperature</li>
+                        <li>Health status</li>
+                    </ul>
+                    <p><strong>Parse specific value:</strong></p>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span class="code-label">Get just percentage</span>
+                            <button class="copy-btn" onclick="copyCode(this, 'termux-battery-status | grep percentage')">
+                                📋 Copy
+                            </button>
+                        </div>
+                        <div class="code-block">termux-battery-status | grep percentage</div>
+                    </div>
+                `
+            },
+            'api-camera': {
+                title: 'Camera API',
+                content: `
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span class="code-label">Take a photo with back camera</span>
+                            <button class="copy-btn" onclick="copyCode(this, 'termux-camera-photo -c 0 photo.jpg')">
+                                📋 Copy
+                            </button>
+                        </div>
+                        <div class="code-block">termux-camera-photo -c 0 photo.jpg</div>
+                    </div>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span class="code-label">Use front camera</span>
+                            <button class="copy-btn" onclick="copyCode(this, 'termux-camera-photo -c 1 selfie.jpg')">
+                                📋 Copy
+                            </button>
+                        </div>
+                        <div class="code-block">termux-camera-photo -c 1 selfie.jpg</div>
+                    </div>
+                    <p><strong>Options:</strong></p>
+                    <ul>
+                        <li><code>-c 0</code> - Back camera</li>
+                        <li><code>-c 1</code> - Front camera</li>
+                    </ul>
+                `
+            },
+            'api-clipboard': {
+                title: 'Clipboard API',
+                content: `
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span class="code-label">Get clipboard content</span>
+                            <button class="copy-btn" onclick="copyCode(this, 'termux-clipboard-get')">
+                                📋 Copy
+                            </button>
+                        </div>
+                        <div class="code-block">termux-clipboard-get</div>
+                    </div>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span class="code-label">Set clipboard content</span>
+                            <button class="copy-btn" onclick="copyCode(this, 'echo "Hello Forrest" | termux-clipboard-set')">
+                                📋 Copy
+                            </button>
+                        </div>
+                        <div class="code-block">echo "Hello Forrest" | termux-clipboard-set</div>
+                    </div>
+                    <p><strong>Useful for:</strong></p>
+                    <ul>
+                        <li>Sharing command output</li>
+                        <li>Processing clipboard data</li>
+                        <li>Automation scripts</li>
+                    </ul>
+                `
+            },
+            'api-notification': {
+                title: 'Notification API',
+                content: `
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span class="code-label">Simple notification</span>
+                            <button class="copy-btn" onclick="copyCode(this, 'termux-notification -t "Title" -c "Content"')">
+                                📋 Copy
+                            </button>
+                        </div>
+                        <div class="code-block">termux-notification -t "Title" -c "Content"</div>
+                    </div>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span class="code-label">Notification with ID (updatable)</span>
+                            <button class="copy-btn" onclick="copyCode(this, 'termux-notification -i 42 -t "Progress" -c "50% complete"')">
+                                📋 Copy
+                            </button>
+                        </div>
+                        <div class="code-block">termux-notification -i 42 -t "Progress" -c "50% complete"</div>
+                    </div>
+                    <p><strong>Options:</strong></p>
+                    <ul>
+                        <li><code>-t</code> - Title</li>
+                        <li><code>-c</code> - Content</li>
+                        <li><code>-i</code> - ID (for updating)</li>
+                        <li><code>--priority</code> - high/low/default</li>
+                    </ul>
+                `
+            },
+            'api-sms': {
+                title: 'SMS API',
+                content: `
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span class="code-label">Send SMS</span>
+                            <button class="copy-btn" onclick="copyCode(this, 'termux-sms-send -n +1234567890 "Hello from Termux!"')">
+                                📋 Copy
+                            </button>
+                        </div>
+                        <div class="code-block">termux-sms-send -n +1234567890 "Hello from Termux!"</div>
+                    </div>
+                    <p><strong>Note:</strong> Requires SMS permissions</p>
+                    <p><strong>Other SMS commands:</strong></p>
+                    <ul>
+                        <li><code>termux-sms-list</code> - List received messages</li>
+                        <li><code>termux-sms-inbox</code> - Show inbox</li>
+                    </ul>
+                `
+            },
+            'api-torch': {
+                title: 'Flashlight API',
+                content: `
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span class="code-label">Turn on flashlight</span>
+                            <button class="copy-btn" onclick="copyCode(this, 'termux-torch on')">
+                                📋 Copy
+                            </button>
+                        </div>
+                        <div class="code-block">termux-torch on</div>
+                    </div>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span class="code-label">Turn off flashlight</span>
+                            <button class="copy-btn" onclick="copyCode(this, 'termux-torch off')">
+                                📋 Copy
+                            </button>
+                        </div>
+                        <div class="code-block">termux-torch off</div>
+                    </div>
+                    <p><strong>Fun script idea:</strong> Make an SOS flasher!</p>
+                `
+            }
+        };
+
+        function showModal(contentId) {
+            const content = modalContent[contentId];
+            if (content) {
+                modalTitle.textContent = content.title;
+                modalBody.innerHTML = content.content;
+                modal.style.display = 'block';
+                setTimeout(() => modal.classList.add('show'), 10);
+            }
         }
 
         function closeModal() {
-            document.getElementById('modal').style.display = 'none';
+            modal.classList.remove('show');
+            setTimeout(() => modal.style.display = 'none', 300);
         }
 
-        // Click outside modal to close
-        window.onclick = function(event) {
-            const modal = document.getElementById('modal');
-            if (event.target == modal) {
+        // Close modal on outside click
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
                 closeModal();
             }
-        }
-
-        // Smooth scrolling
-        function scrollToSection(sectionId) {
-            const section = document.getElementById(sectionId);
-            section.scrollIntoView({ behavior: 'smooth' });
-            
-            // Close sidebar on mobile
-            if (window.innerWidth <= 768) {
-                sidebar.classList.remove('active');
-                sidebarToggle.classList.remove('active');
-                mainContent.classList.remove('shifted');
-            }
-        }
-
-        function scrollToTop() {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        // Show notification
-        function showNotification(message) {
-            const notification = document.createElement('div');
-            notification.style.cssText = `
-                position: fixed;
-                bottom: 100px;
-                left: 50%;
-                transform: translateX(-50%);
-                background: var(--success);
-                color: var(--bg-dark);
-                padding: 15px 30px;
-                border-radius: 8px;
-                font-weight: bold;
-                z-index: 3000;
-                animation: slideUp 0.3s, slideDown 0.3s 2s forwards;
-            `;
-            notification.textContent = message;
-            document.body.appendChild(notification);
-            
-            setTimeout(() => notification.remove(), 2500);
-        }
-
-        // Forrest's special typewriter
-        const forrestCommands = [
-            'ls -la',
-            'python forrest_script.py',
-            'cd ~/projects',
-            'git status',
-            'echo "Forrest is awesome"',
-            'termux-torch on'
-        ];
-        
-        let commandIndex = 0;
-        let charIndex = 0;
-        let isDeleting = false;
-        
-        function typeWriter() {
-            const element = document.getElementById('typewriter');
-            if (!element) return;
-            
-            const currentCommand = forrestCommands[commandIndex];
-            
-            if (!isDeleting && charIndex < currentCommand.length) {
-                element.textContent = currentCommand.substring(0, charIndex + 1);
-                charIndex++;
-                setTimeout(typeWriter, 100);
-            } else if (isDeleting && charIndex > 0) {
-                element.textContent = currentCommand.substring(0, charIndex - 1);
-                charIndex--;
-                setTimeout(typeWriter, 50);
-            } else if (charIndex === currentCommand.length && !isDeleting) {
-                isDeleting = true;
-                setTimeout(typeWriter, 2000);
-            } else if (charIndex === 0 && isDeleting) {
-                isDeleting = false;
-                commandIndex = (commandIndex + 1) % forrestCommands.length;
-                setTimeout(typeWriter, 500);
-            }
-        }
-        
-        // Start typewriter effect
-        setTimeout(typeWriter, 1000);
-
-        // Show command details
-        function showCommand(cmd) {
-            const commandDetails = {
-                'termux-style': 'This opens a menu to change colors and fonts. Pretty cool!',
-                'extra-keys': 'Go to Settings → Keyboard → Extra Keys Row. Trust me, you want this.',
-            };
-            showNotification(commandDetails[cmd] || 'Try it and see what happens! 😎');
-        }
-
-        // Show command modal
-        function showCommandModal(command, description) {
-            const modalContent = `
-                <h3>Command Details</h3>
-                <div class="code-container">
-                    <div class="code-header">
-                        <span class="code-label">The Command</span>
-                        <button class="copy-btn" onclick="copyCode(this, '${command}')">
-                            <span>📋</span> Copy
-                        </button>
-                    </div>
-                    <div class="code-block">${command}</div>
-                </div>
-                <p style="margin-top: 20px;">${description}</p>
-                <div class="forrest-note info-box" style="margin-top: 20px;">
-                    <h4>💡 Forrest, Remember</h4>
-                    <p>You can always use the up arrow to get back to commands you already typed. Work smarter, not harder!</p>
-                </div>
-            `;
-            document.getElementById('modalContent').innerHTML = modalContent;
-            document.getElementById('modal').style.display = 'block';
-        }
-
-        // Show path info
-        function showPath(path) {
-            copyCommand(`cd ${path}`);
-            showNotification(`Path copied! Just paste it 📁`);
-        }
-
-        // Show API command
-        function showAPICommand(cmd) {
-            copyCommand(cmd);
-            showNotification('API command copied! This is the fun stuff 🔥');
-        }
-
-        // Run command demo
-        function runCommand(cmd) {
-            showNotification(`Would run: ${cmd}`);
-        }
-
-        // Package demo
-        function runPackageDemo(action) {
-            const demos = {
-                'search': 'pkg search python',
-                'install': 'pkg install python',
-                'list': 'pkg list-installed',
-            };
-            
-            copyCommand(demos[action] || 'pkg help');
-            showNotification('Command copied! Paste that bad boy 🚀');
-        }
-
-        // Add CSS animation keyframes dynamically
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes slideUp {
-                from { transform: translate(-50%, 100px); opacity: 0; }
-                to { transform: translate(-50%, 0); opacity: 1; }
-            }
-            @keyframes slideDown {
-                from { transform: translate(-50%, 0); opacity: 1; }
-                to { transform: translate(-50%, 100px); opacity: 0; }
-            }
-        `;
-        document.head.appendChild(style);
-
-        // Initialize animations on scroll
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -100px 0px'
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
-                }
-            });
-        }, observerOptions);
-
-        document.querySelectorAll('.section').forEach(section => {
-            section.style.opacity = '0';
-            section.style.transform = 'translateY(30px)';
-            section.style.transition = 'all 0.6s ease-out';
-            observer.observe(section);
         });
+
+        // Close modal on Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && modal.style.display === 'block') {
+                closeModal();
+            }
+        });
+
+        // Mobile navigation
+        function toggleMobileNav() {
+            const sidebar = document.getElementById('sidebar');
+            if (sidebar.style.display === 'block') {
+                sidebar.style.display = 'none';
+            } else {
+                sidebar.style.display = 'block';
+            }
+        }
     </script>
 </body>
 </html>
